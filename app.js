@@ -965,12 +965,18 @@ function updateGlobalProgress() {
 
 // ==================== READING TOGGLE & STATIC READINGS ====================
 function injectStaticReadings() {
+  // Wrap hardcoded Thai pronunciation parentheses inside #tab-easy so the toggle hides them too
+  document.querySelectorAll('#tab-easy .speak-chip, #tab-easy .muted').forEach(el => {
+    if (el.dataset.wrappedEasy) return;
+    el.innerHTML = el.innerHTML.replace(/(\([ก-๛]+(?:[\s-][ก-๛]+)*(?:\s*→\s*[^)]+)?(?:\s*\/\s*[^)]+)?\))/g, '<span class="th-read">$1</span>');
+    el.dataset.wrappedEasy = '1';
+  });
+
   // Add Thai readings to static Korean elements in Grammar/Dashboard/Track32 that don't already have Thai readings
   document.querySelectorAll('#tab-grammar .speak-chip, #tab-grammar .example-list .kr, #tab-grammar .passage-kr, #tab-grammar .study-table td.kr, #tab-dashboard .trap-item .kr, .script-grid p').forEach(el => {
     if (el.dataset.readInjected) return;
     const txt = el.textContent || '';
     if (!/[가-힣]/.test(txt)) return;
-    // Skip if already contains Thai pronunciation in parentheses
     if (/\([ก-๛-]+/.test(txt)) return;
     const krParts = txt.match(/[가-힣]+(?:\s+[가-힣]+)*/g);
     if (!krParts) return;
@@ -984,15 +990,23 @@ function injectStaticReadings() {
   });
 }
 
+function applyReadingToggleUI() {
+  const show = state.showReadings !== false;
+  document.body.classList.toggle('hide-readings', !show);
+  const readingBtn = document.getElementById('reading-toggle');
+  if (readingBtn) {
+    readingBtn.textContent = show ? '🔤 คำอ่านไทย: เปิด' : '🔤 คำอ่านไทย: ปิด';
+    readingBtn.classList.toggle('btn-teal', show);
+    readingBtn.classList.toggle('btn-outline', !show);
+  }
+}
+
 const readingBtn = document.getElementById('reading-toggle');
 if (readingBtn) {
-  let showReadings = true;
   readingBtn.addEventListener('click', () => {
-    showReadings = !showReadings;
-    document.body.classList.toggle('hide-readings', !showReadings);
-    readingBtn.textContent = showReadings ? '🔤 คำอ่านไทย: เปิด' : '🔤 คำอ่านไทย: ปิด';
-    readingBtn.classList.toggle('btn-teal', showReadings);
-    readingBtn.classList.toggle('btn-outline', !showReadings);
+    state.showReadings = state.showReadings === false ? true : false;
+    saveState();
+    applyReadingToggleUI();
   });
 }
 
@@ -1008,5 +1022,6 @@ renderPart1Listening();
 renderPart2Quiz();
 renderPart3Writing();
 injectStaticReadings();
+applyReadingToggleUI();
 updateExamScore();
 updateGlobalProgress();
