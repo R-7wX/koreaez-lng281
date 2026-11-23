@@ -36,35 +36,47 @@
   </header>
 
   <nav class="main-nav" aria-label="หมวดการเรียน">
-    <button class="nav-tab active" data-tab="dashboard">
+    <button class="nav-tab active" data-tab="guided">
+      <span class="tab-icon">🌱</span>
+      <span>เริ่มตรงนี้: ทีละก้าว (10 ด่าน)</span>
+    </button>
+    <button class="nav-tab" data-tab="dashboard">
       <span class="tab-icon">🧭</span>
       <span>แผน 3 ชม.</span>
     </button>
     <button class="nav-tab" data-tab="easy">
       <span class="tab-icon">🐣</span>
-      <span>สอนแบบเข้าใจง่ายสุดๆ</span>
+      <span>สรุปจำง่าย</span>
     </button>
     <button class="nav-tab" data-tab="grammar">
       <span class="tab-icon">📘</span>
-      <span>ชม. 1: ไวยากรณ์</span>
+      <span>ไวยากรณ์</span>
     </button>
     <button class="nav-tab" data-tab="numbers">
       <span class="tab-icon">🔢</span>
-      <span>ชม. 2: ตัวเลข (เน้น!)</span>
+      <span>ตัวเลข (เน้น!)</span>
     </button>
     <button class="nav-tab" data-tab="vocab">
       <span class="tab-icon">🗂️</span>
-      <span>คลังคำศัพท์</span>
+      <span>คำศัพท์</span>
     </button>
     <button class="nav-tab" data-tab="exam">
       <span class="tab-icon">🎯</span>
-      <span>ชม. 3: สอบจำลอง 3 พาร์ท</span>
+      <span>สอบจำลอง 3 พาร์ท</span>
     </button>
   </nav>
 
   <main class="container">
+    <!-- ==================== TAB 0: GUIDED STEP-BY-STEP (DEFAULT) ==================== -->
+    <section id="tab-guided" class="tab-panel active">
+      <div class="calm-banner">
+        <strong>หายใจลึกๆ ก่อนนะครับ 💛</strong> ไม่ต้องอ่านทั้งหมดในทีเดียว — แค่กดเรียน <strong>ทีละด่านสั้นๆ (ด่านละ 2 นาที)</strong> ครบ 10 ด่าน ก็มีเนื้อหาหลักครบพอที่จะ <strong>สอบผ่าน Final</strong> แล้วครับ!
+      </div>
+      <div id="guided-stage-container"></div>
+    </section>
+
     <!-- ==================== TAB 1: DASHBOARD ==================== -->
-    <section id="tab-dashboard" class="tab-panel active">
+    <section id="tab-dashboard" class="tab-panel">
       <div class="hero-card">
         <div class="hero-content">
           <span class="eyebrow">FINAL EXAM CRASH COURSE • วันอังคารที่ 24 พฤศจิกายน</span>
@@ -828,5 +840,6 @@
   <script src="audio-manifest.js"></script>
   <script src="data.js"></script>
   <script src="app.js"></script>
+  <script src="guided.js"></script>
 </body>
 </html>
