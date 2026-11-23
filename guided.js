@@ -369,7 +369,7 @@ function renderGuidedStage() {
   const dotsHTML = GUIDED_STAGES.map((s, idx) => {
     const isDone = !!doneMap[s.id];
     const isCur = idx === currentGuidedIdx;
-    return `<button class="stage-dot ${isCur ? 'current' : ''} ${isDone ? 'done' : ''}" onclick="goGuidedStage(${idx})" title="${s.title}">${isDone ? '✓' : s.id}</button>`;
+    return `<button class="stage-dot ${isCur ? 'current' : ''} ${isDone ? 'done' : ''}" onclick="goGuidedStage(${idx})" title="${s.title.replace(/"/g, '&quot;')}">${isDone ? '✓' : s.id}</button>`;
   }).join('');
 
   wrap.innerHTML = `

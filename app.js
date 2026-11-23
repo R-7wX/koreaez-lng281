@@ -120,14 +120,14 @@ function syllableToThai(cho, jung, jong, isWordStart) {
     case 6: return cho === 11 ? `ยอ${f}` : `${c}ยอ${f}`;    // ㅕ
     case 7: return cho === 11 ? `เย${f}` : `เ${c}ย${f}`;    // ㅖ
     case 8: return hasF ? `${c}${f === 'ง' || f === 'น' || f === 'ม' ? '' : 'โ'}${f}` : `โ${c}`; // ㅗ (fix below)
-    case 9: return hasF ? `${c}วั${f}` : `${c}วา`;           // ㅘ
-    case 10: return `แ${c}ว${f}`;                            // ㅙ
-    case 11: return `เ${c}ว${f}`;                            // ㅚ
-    case 12: return cho === 11 ? (hasF ? `ยง` : 'โย') : `โ${c}ย${f}`; // ㅛ
+    case 9: return cho === 11 ? (hasF ? `วั${f}` : 'วา') : (hasF ? `${c}วั${f}` : `${c}วา`); // ㅘ
+    case 10: return cho === 11 ? `แว${f}` : `แ${c}ว${f}`;    // ㅙ
+    case 11: return cho === 11 ? `เว${f}` : `เ${c}ว${f}`;    // ㅚ
+    case 12: return cho === 11 ? (hasF ? `ย${f}` : 'โย') : `${c}โย${f}`; // ㅛ
     case 13: return hasF ? `${c}ุ${f}` : `${c}ู`;            // ㅜ
-    case 14: return `${c}วอ${f}`;                            // ㅝ
-    case 15: return `เ${c}ว${f}`;                            // ㅞ
-    case 16: return `${c}วี${f}`;                            // ㅟ
+    case 14: return cho === 11 ? `วอ${f}` : `${c}วอ${f}`;    // ㅝ
+    case 15: return cho === 11 ? `เว${f}` : `เ${c}ว${f}`;    // ㅞ
+    case 16: return cho === 11 ? `วี${f}` : `${c}วี${f}`;    // ㅟ
     case 17: return cho === 11 ? (hasF ? `ยุ${f}` : 'ยู') : `${c}ยู${f}`; // ㅠ
     case 18: return hasF ? `${c}ึ${f}` : `${c}ือ`;           // ㅡ
     case 19: return `${c}ึย${f}`;                            // ㅢ

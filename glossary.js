@@ -267,7 +267,7 @@ const WORD_GLOSSARY = {
   '하나': '1 (เกาหลี)', '한': '1 (หน้าลักษณะนาม)',
   '둘': '2 (เกาหลี)', '두': '2 (หน้าลักษณะนาม)',
   '셋': '3 (เกาหลี)', '세': '3 (หน้าลักษณะนาม)',
-  '넷': '4 (เกาหลี)', '네': '4 (หน้าลักษณะนาม)',
+  '넷': '4 (เกาหลี)', '네': 'ใช่ / ครับ / ค่ะ (หรือ 4 หน้าลักษณะนาม)',
   '다섯': '5 (เกาหลี)', '여섯': '6 (เกาหลี)',
   '일곱': '7 (เกาหลี)', '여덟': '8 (เกาหลี)',
   '아홉': '9 (เกาหลี)', '열': '10 (เกาหลี)',
@@ -344,6 +344,16 @@ function lookupWordThai(rawToken) {
   const mWon = tok.match(/^([\d,]+)원(.*)$/);
   if (mWon) return `${mWon[1]} วอน`;
 
+  // Try stripping known particles/endings from stem FIRST (so 사이에 matches 사이 "ระหว่าง", not Sino number 42!)
+  for (const p of PARTICLE_SUFFIXES) {
+    if (tok.endsWith(p.suf) && tok.length > p.suf.length) {
+      const stem = tok.slice(0, -p.suf.length);
+      if (WORD_GLOSSARY[stem]) {
+        return `${WORD_GLOSSARY[stem]} + ${p.suf}(${p.mean})`;
+      }
+    }
+  }
+
   // Check Sino compound numbers (e.g. 이십육일, 사천오백, 오삼삼칠)
   if (/^[공영일이삼사오육칠팔구십백천만]+(?:일|월|원|번|층|분|이에요|예요|에)?$/.test(tok)) {
     let suffixMean = '';
@@ -366,15 +376,6 @@ function lookupWordThai(rawToken) {
     return `เลข ${decoded}${unit}${suffixMean}`;
   }
 
-  // Try stripping known particles/endings from stem
-  for (const p of PARTICLE_SUFFIXES) {
-    if (tok.endsWith(p.suf) && tok.length > p.suf.length) {
-      const stem = tok.slice(0, -p.suf.length);
-      if (WORD_GLOSSARY[stem]) {
-        return `${WORD_GLOSSARY[stem]} + ${p.suf}(${p.mean})`;
-      }
-    }
-  }
   return '';
 }
 
