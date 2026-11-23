@@ -265,7 +265,27 @@ function showAudioToast(label) {
   toastTimer = setTimeout(() => toast.classList.remove('show'), 2800);
 }
 
-function speakWithWebSpeech(text, rate) {
+let sharedAudio = null;
+let speakSeq = 0;
+
+function stopAllAudio() {
+  speakSeq++;
+  if (sharedAudio) {
+    try {
+      sharedAudio.pause();
+      sharedAudio.currentTime = 0;
+    } catch (e) {}
+  }
+  document.querySelectorAll('audio').forEach(el => {
+    try { el.pause(); } catch (e) {}
+  });
+  if ('speechSynthesis' in window) {
+    try { window.speechSynthesis.cancel(); } catch (e) {}
+  }
+}
+
+function speakWithWebSpeech(text, rate, token) {
+  if (token !== speakSeq) return;
   if (!('speechSynthesis' in window)) return;
   window.speechSynthesis.cancel();
   const utter = new SpeechSynthesisUtterance(text);
@@ -277,46 +297,70 @@ function speakWithWebSpeech(text, rate) {
   window.speechSynthesis.speak(utter);
 }
 
+function playSingleAudio(src, rate, token, onRealError) {
+  if (!sharedAudio) {
+    sharedAudio = new Audio();
+    sharedAudio.preload = 'auto';
+  }
+  sharedAudio.onended = null;
+  sharedAudio.onerror = null;
+  sharedAudio.src = src;
+  sharedAudio.playbackRate = rate;
+  sharedAudio.onerror = () => {
+    if (token !== speakSeq) return;
+    if (onRealError) onRealError();
+  };
+  const playPromise = sharedAudio.play();
+  if (playPromise && typeof playPromise.catch === 'function') {
+    playPromise.catch(err => {
+      if (token !== speakSeq) return;
+      if (err && err.name === 'AbortError') return;
+      if (onRealError) onRealError();
+    });
+  }
+}
+
 function speak(text, rateOverride) {
   const clean = cleanAudioKey(text);
   if (!clean) return;
   const rate = rateOverride || speechRate;
+  stopAllAudio();
+  const token = speakSeq;
   showAudioToast(clean);
-
-  if (currentAudio) {
-    try { currentAudio.pause(); currentAudio.currentTime = 0; } catch (e) {}
-    currentAudio = null;
-  }
-  if ('speechSynthesis' in window) {
-    try { window.speechSynthesis.cancel(); } catch (e) {}
-  }
 
   const manifest = window.AUDIO_MANIFEST || {};
   const mp3Path = manifest[clean] || manifest[clean.replace(/[.?!]$/, '')] || manifest[clean + '.'];
 
   if (mp3Path) {
-    const audio = new Audio(mp3Path);
-    audio.playbackRate = rate;
-    currentAudio = audio;
-    audio.play().catch(() => speakWithWebSpeech(clean, rate));
+    playSingleAudio(mp3Path, rate, token, () => speakWithWebSpeech(clean, rate, token));
     return;
   }
 
   // Fallback for dynamic phrases (e.g., randomized Number Drills): Google TTS MP3 -> Web Speech API
   const ttsUrl = `https://translate.google.com/translate_tts?ie=UTF-8&tl=ko&client=tw-ob&q=${encodeURIComponent(clean)}`;
-  const fallbackAudio = new Audio(ttsUrl);
-  fallbackAudio.playbackRate = rate;
-  currentAudio = fallbackAudio;
-  fallbackAudio.play().catch(() => speakWithWebSpeech(clean, rate));
+  playSingleAudio(ttsUrl, rate, token, () => speakWithWebSpeech(clean, rate, token));
 }
 
 if ('speechSynthesis' in window) {
   window.speechSynthesis.onvoiceschanged = () => {};
 }
 
-// Allow clicking ANY Korean text (.kr) across the entire page to hear it!
+// Pause word audio if user plays Track 32 <audio>
+document.addEventListener('play', (e) => {
+  if (e.target && e.target.tagName === 'AUDIO') {
+    speakSeq++;
+    if (sharedAudio) {
+      try { sharedAudio.pause(); } catch (err) {}
+    }
+    if ('speechSynthesis' in window) {
+      try { window.speechSynthesis.cancel(); } catch (err) {}
+    }
+  }
+}, true);
+
+// Allow clicking ANY Korean text (.kr) across the entire page to hear it (never double-firing on buttons/onclick)
 document.addEventListener('click', (e) => {
-  if (e.target.closest('button, input, a, summary, audio, .pos-card, .num-tile, .counter-chip, .month-chip, .vocab-card')) return;
+  if (e.target.closest('button, [onclick], input, a, summary, audio, .pos-card, .num-tile, .counter-chip, .month-chip, .vocab-card')) return;
   const krEl = e.target.closest('.kr');
   if (!krEl) return;
   const txt = krEl.textContent || '';
