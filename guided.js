@@ -429,7 +429,7 @@ function renderGuidedStage() {
     </div>
   `;
 
-  // Inject word-by-word breakdown under every example line in this guided stage
+  // Inject word-by-word breakdown under every example line and enhance all chips in this guided stage
   wrap.querySelectorAll('.g-ex').forEach(el => {
     const krParts = (el.textContent || '').match(/[가-힣0-9]+(?:\s+[가-힣0-9]+)*/g);
     if (!krParts) return;
@@ -440,6 +440,9 @@ function renderGuidedStage() {
       el.appendChild(div.firstElementChild);
     }
   });
+  if (typeof enhanceAllKoreanContent === 'function') {
+    enhanceAllKoreanContent(wrap);
+  }
 }
 
 function goGuidedStage(idx) {

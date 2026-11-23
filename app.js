@@ -508,10 +508,11 @@ function initParticleDrill() {
   const container = document.getElementById('particle-drill-container');
   container.innerHTML = shuffled.map((item, idx) => `
     <div class="mini-drill-item" id="mdrill-${idx}">
-      <div class="mini-drill-q kr">${item.stem} ( ___ ) ${item.suffix}</div>
-      <div class="mini-drill-btns">
+      <div class="mini-drill-q kr">${item.stem} ${readTag(item.stem)} ( ___ ) ${item.suffix} ${readTag(item.suffix)}</div>
+      ${buildWordBreakdownHTML(item.stem + ' ' + item.suffix)}
+      <div class="mini-drill-btns" style="margin-top:8px">
         ${item.options.map(opt => `
-          <button class="mini-opt" onclick="checkMiniDrill(${idx}, '${opt}', '${item.ans}', '${item.reason}', '${item.stem}${item.ans} ${item.suffix}')">${opt}</button>
+          <button class="mini-opt" data-val="${opt}" onclick="checkMiniDrill(${idx}, '${opt}', '${item.ans}', '${item.reason}', '${item.stem}${item.ans} ${item.suffix}')">${opt} ${readTag(opt)}</button>
         `).join('')}
       </div>
       <div class="mini-feedback" id="mdrill-fb-${idx}"></div>
@@ -523,12 +524,13 @@ function checkMiniDrill(idx, chosen, ans, reason, fullSentence) {
   const wrap = document.getElementById(`mdrill-${idx}`);
   wrap.querySelectorAll('.mini-opt').forEach(btn => {
     btn.disabled = true;
-    if (btn.textContent === ans) btn.classList.add('correct');
-    else if (btn.textContent === chosen) btn.classList.add('wrong');
+    const v = btn.dataset.val || btn.textContent.trim();
+    if (v === ans) btn.classList.add('correct');
+    else if (v === chosen) btn.classList.add('wrong');
   });
   const fb = document.getElementById(`mdrill-fb-${idx}`);
   fb.style.color = chosen === ans ? 'var(--teal)' : 'var(--coral)';
-  fb.textContent = (chosen === ans ? '✅ ถูกต้อง! ' : '❌ ผิด — ') + reason;
+  fb.innerHTML = `${chosen === ans ? '✅ ถูกต้อง! ' : '❌ ผิด — '}${reason} <span class="kr">(${fullSentence} ${readTag(fullSentence)})</span>`;
   speak(fullSentence);
 }
 
@@ -676,9 +678,11 @@ function generateNumDrill(mode) {
   const shuffled = allChoices.sort(() => Math.random() - 0.5);
 
   const stage = document.getElementById('num-drill-stage');
+  const promptKr = (prompt.match(/[가-힣0-9]+(?:\s+[가-힣0-9]+)*/g) || []).join(' ');
   stage.innerHTML = `
     <div class="drill-visual">${visual}</div>
-    <div class="drill-prompt">${prompt}</div>
+    <div class="drill-prompt">${prompt} ${promptKr ? readTag(promptKr) : ''}</div>
+    ${promptKr ? `<div style="max-width:680px;margin:0 auto 12px;text-align:left">${buildWordBreakdownHTML(promptKr)}</div>` : ''}
     <div class="drill-choices">
       ${shuffled.map((ch, i) => `
         <button class="choice-btn kr" data-idx="${i}" data-val="${ch}">${ch}${readTag(ch, true)}</button>
@@ -903,7 +907,10 @@ function renderPart3Writing() {
           <button class="btn-tiny btn-primary" onclick="checkWriting('${item.id}')">ตรวจ</button>
         </div>
         <div class="helper-chips">
-          ${item.helpers.map(h => `<button class="helper-chip" onclick="appendHelper('${item.id}', '${h}')">+ ${h} ${readTag(h)}</button>`).join('')}
+          ${item.helpers.map(h => {
+            const hm = lookupWordThai(h);
+            return `<button class="helper-chip" onclick="appendHelper('${item.id}', '${h}')">+ ${h} ${readTag(h)}${hm ? `<span class="wb-th" style="margin-left:3px">(${hm})</span>` : ''}</button>`;
+          }).join('')}
           <button class="helper-chip" style="color:var(--coral)" onclick="document.getElementById('winput-${item.id}').value=''">ล้าง</button>
         </div>
         <div id="wfb-${item.id}" class="quiz-explain"></div>
@@ -941,9 +948,9 @@ function checkWriting(id) {
     state.part3Correct[id] = true;
     saveState();
     document.getElementById('wbadge-' + id).textContent = '✅ ผ่านแล้ว';
-    fb.innerHTML = `<strong>✅ ถูกต้องเป๊ะ!</strong> เฉลย: <span class="kr">${item.displayAns}</span> <button class="speak-chip" onclick="speak('${item.displayAns.split('/')[0]}')">🔊 ฟัง</button>`;
+    fb.innerHTML = `<strong>✅ ถูกต้องเป๊ะ!</strong> เฉลย: <span class="kr">${item.displayAns}</span> ${readTag(item.displayAns)} <button class="speak-chip" onclick="speak('${item.displayAns.split('/')[0]}')">🔊 ฟัง</button>${buildWordBreakdownHTML(item.displayAns.split('/')[0])}`;
   } else {
-    fb.innerHTML = `<strong>❌ ลองดูเฉลย:</strong> <span class="kr">${item.displayAns}</span> <button class="speak-chip" onclick="speak('${item.displayAns.split('/')[0]}')">🔊 ฟัง</button>`;
+    fb.innerHTML = `<strong>❌ ลองดูเฉลย:</strong> <span class="kr">${item.displayAns}</span> ${readTag(item.displayAns)} <button class="speak-chip" onclick="speak('${item.displayAns.split('/')[0]}')">🔊 ฟัง</button>${buildWordBreakdownHTML(item.displayAns.split('/')[0])}`;
   }
   updateExamScore();
 }
@@ -975,20 +982,37 @@ function updateGlobalProgress() {
 }
 
 // ==================== READING TOGGLE & STATIC READINGS ====================
-function injectStaticReadings() {
-  // Wrap hardcoded Thai pronunciation parentheses inside #tab-easy so the toggle hides them too
-  document.querySelectorAll('#tab-easy .speak-chip, #tab-easy .muted').forEach(el => {
+function enhanceAllKoreanContent(root = document) {
+  // 1. Wrap hardcoded Thai pronunciation parentheses inside #tab-easy so the toggle hides them too
+  root.querySelectorAll('#tab-easy .speak-chip, #tab-easy .muted').forEach(el => {
     if (el.dataset.wrappedEasy) return;
     el.innerHTML = el.innerHTML.replace(/(\([ก-๛]+(?:[\s-][ก-๛]+)*(?:\s*→\s*[^)]+)?(?:\s*\/\s*[^)]+)?\))/g, '<span class="th-read">$1</span>');
     el.dataset.wrappedEasy = '1';
   });
 
-  // Add Thai readings to static Korean elements in Grammar/Dashboard/Track32 that don't already have Thai readings
-  document.querySelectorAll('#tab-grammar .speak-chip, #tab-grammar .example-list .kr, #tab-grammar .passage-kr, #tab-grammar .study-table td.kr, #tab-dashboard .trap-item .kr, .script-grid p').forEach(el => {
+  // 2. Add Thai readings to ALL static Korean elements across ALL tabs that don't already have Thai readings
+  const readSelectors = [
+    '.speak-chip',
+    '.study-table td.kr',
+    '.study-table strong.kr',
+    '.study-table .badge-teal.kr',
+    '.study-table .badge-coral.kr',
+    '.formula-box .kr',
+    '.note-box .kr',
+    '.example-list .kr',
+    '.passage-kr',
+    '.trap-item .kr',
+    '.script-grid p',
+    '.track32-header h3',
+    '.g-box .speak-chip'
+  ].join(', ');
+
+  root.querySelectorAll(readSelectors).forEach(el => {
     if (el.dataset.readInjected) return;
+    if (el.querySelector('.th-read, .th-read-block')) { el.dataset.readInjected = '1'; return; }
     const txt = el.textContent || '';
     if (!/[가-힣]/.test(txt)) return;
-    if (/\([ก-๛-]+/.test(txt)) return;
+    if (/\([ก-๛]+-[ก-๛]+/.test(txt)) { el.dataset.readInjected = '1'; return; }
     const krParts = txt.match(/[가-힣]+(?:\s+[가-힣]+)*/g);
     if (!krParts) return;
     const th = hangulToThai(krParts.join(' / '));
@@ -999,12 +1023,28 @@ function injectStaticReadings() {
     el.appendChild(span);
     el.dataset.readInjected = '1';
   });
-  // Inject word-by-word breakdowns on Grammar examples, Reading passage, and Track 32 script
-  document.querySelectorAll('#tab-grammar .example-list li, #tab-grammar .passage-kr, .script-grid p').forEach(el => {
+
+  // 3. Inject word-by-word breakdowns on ALL sentence blocks across Grammar, Numbers, Track 32, Easy, and Guided
+  const wbSelectors = [
+    '#tab-grammar .example-list li',
+    '#tab-grammar .passage-kr',
+    '#tab-grammar .formula-box > div',
+    '#tab-grammar .note-box',
+    '#tab-grammar .rules-list li',
+    '#tab-numbers .note-box',
+    '.script-grid p',
+    '#tab-easy .recipe-box',
+    '.track32-header h3'
+  ].join(', ');
+
+  root.querySelectorAll(wbSelectors).forEach(el => {
     if (el.dataset.wbInjected) return;
+    if (el.querySelector('.wb-strip')) { el.dataset.wbInjected = '1'; return; }
     const krParts = (el.textContent || '').match(/[가-힣0-9]+(?:\s+[가-힣0-9]+)*/g);
     if (!krParts) return;
-    const html = buildWordBreakdownHTML(krParts.join(' '));
+    const joined = krParts.join(' ');
+    if (!/[가-힣]/.test(joined)) return;
+    const html = buildWordBreakdownHTML(joined);
     if (html) {
       const div = document.createElement('div');
       div.innerHTML = html;
@@ -1012,6 +1052,10 @@ function injectStaticReadings() {
       el.dataset.wbInjected = '1';
     }
   });
+}
+
+function injectStaticReadings() {
+  enhanceAllKoreanContent(document);
 }
 
 function applyReadingToggleUI() {
