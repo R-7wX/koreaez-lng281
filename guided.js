@@ -374,8 +374,9 @@ function renderGuidedStage() {
 
   wrap.innerHTML = `
     <div class="guided-top-bar">
-      <div class="guided-progress-text">
-        <strong>🌱 โหมดจับมือเรียนทีละก้าว</strong> — ด่านที่ ${stage.id} จาก ${GUIDED_STAGES.length} (ผ่านแล้ว ${doneCount}/${GUIDED_STAGES.length} ด่าน • ${pct}%)
+      <div class="guided-progress-text" style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap">
+        <span><strong>🌱 โหมดจับมือเรียนทีละก้าว</strong> — ด่านที่ ${stage.id} จาก ${GUIDED_STAGES.length} (ผ่านแล้ว ${doneCount}/${GUIDED_STAGES.length} ด่าน • ${pct}%)</span>
+        <button class="btn-tiny btn-outline" onclick="resetGuided()">🔄 รีเซ็ต 10 ด่าน</button>
       </div>
       <div class="guided-bar-track"><div class="guided-bar-fill" style="width:${Math.max(10, pct)}%"></div></div>
       <div class="stage-dots">${dotsHTML}</div>
@@ -485,6 +486,13 @@ function completeAndNextGuided(stageId) {
     renderGuidedStage();
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
+}
+
+function resetGuided() {
+  state.guidedDone = {};
+  currentGuidedIdx = 0;
+  saveState();
+  renderGuidedStage();
 }
 
 // Initialize guided stage on load

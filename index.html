@@ -738,9 +738,12 @@
           <h2>ข้อสอบจำลอง Final Exam (LNG281 — 40 คะแนน)</h2>
           <p>ครบทั้ง Part 1 Listening (ไฟล์เสียงจริง + บทสนทนา 12 ข้อ), Part 2 Grammar/Vocab/Convo (30 ข้อ), Part 3 Writing จากรูป (18 ข้อ ตรง Study Review)</p>
         </div>
-        <div class="exam-score-box">
-          <span>คะแนนรวมจำลอง</span>
-          <strong id="exam-total-score">0 / 60</strong>
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+          <div class="exam-score-box">
+            <span>คะแนนรวมจำลอง</span>
+            <strong id="exam-total-score">0 / 60</strong>
+          </div>
+          <button class="btn btn-outline" onclick="resetAllExam()">🔄 รีเซ็ตข้อสอบทั้ง 3 พาร์ท</button>
         </div>
       </div>
 
@@ -796,6 +799,7 @@
               <span>ความเร็วเสียง:</span>
               <button class="btn-tiny btn-outline speed-btn" data-rate="0.75">ช้า (0.75x)</button>
               <button class="btn-tiny btn-primary speed-btn" data-rate="0.95">ปกติ (0.95x)</button>
+              <button class="btn-tiny btn-outline" onclick="resetPart1()">🔄 ทำ Part 1 ใหม่</button>
             </div>
           </div>
           <div id="listening-quiz-list" class="quiz-list"></div>

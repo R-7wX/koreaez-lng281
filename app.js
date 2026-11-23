@@ -880,6 +880,24 @@ function answerPart1(id, idx) {
   updateExamScore();
 }
 
+function resetPart1() {
+  state.part1Answers = {};
+  saveState();
+  renderPart1Listening();
+  updateExamScore();
+}
+
+function resetAllExam() {
+  state.part1Answers = {};
+  state.part2Answers = {};
+  state.part3Correct = {};
+  saveState();
+  renderPart1Listening();
+  renderPart2Quiz();
+  renderPart3Writing();
+  updateExamScore();
+}
+
 function renderPart2Quiz() {
   const container = document.getElementById('part2-quiz-list');
   container.innerHTML = PART2_QUIZ.map((item, qIdx) => {
