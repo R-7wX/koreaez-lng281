@@ -777,8 +777,120 @@ body {
   border-top: 1px solid var(--border);
 }
 
+/* Easy Kid-Friendly Lesson Styles */
+.easy-card { border-left: 5px solid var(--primary); }
+.easy-teal { border-left-color: var(--teal); }
+.easy-blue { border-left-color: var(--primary); }
+.easy-coral { border-left-color: var(--coral); }
+.easy-amber { border-left-color: var(--amber); }
+.easy-purple { border-left-color: #7C3AED; }
+
+.easy-badge {
+  display: inline-block;
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: var(--primary);
+  background: #EAF0F9;
+  padding: 3px 10px;
+  border-radius: 999px;
+  margin-bottom: 8px;
+}
+
+.kid-compare {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin: 12px 0;
+}
+.kid-box {
+  border-radius: 14px;
+  padding: 16px;
+  border: 1.5px solid var(--border);
+}
+.kid-yes { background: var(--teal-soft); border-color: #B5E4D8; }
+.kid-no { background: var(--coral-soft); border-color: #F4C4C4; }
+.kid-title { font-weight: 800; font-size: 0.98rem; margin-bottom: 8px; }
+.char-anatomy {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #fff;
+  padding: 10px 14px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+.big-char { font-size: 1.9rem; font-weight: 900; color: var(--ink); }
+.anatomy-arrow { font-size: 0.88rem; color: var(--primary); font-weight: 700; }
+.kid-chips, .pron-strip { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+.kid-memory {
+  background: var(--amber-soft);
+  border: 1px dashed var(--amber);
+  color: #783F04;
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-size: 0.9rem;
+}
+
+.four-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-top: 10px;
+}
+.mini-story {
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 14px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+.story-emoji { font-size: 1.8rem; }
+.story-kr { font-size: 1.05rem; font-weight: 800; color: var(--primary); }
+.story-read { font-size: 0.8rem; color: var(--coral); font-weight: 700; }
+.mini-story p { margin: 2px 0 6px; font-size: 0.84rem; color: var(--muted); }
+
+.recipe-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-top: 10px;
+}
+.recipe-box {
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 14px;
+}
+.recipe-box h4 { margin: 0 0 10px; font-size: 0.98rem; }
+.lego-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  font-weight: 800;
+}
+.lego {
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  line-height: 1.25;
+  text-align: center;
+  color: #fff;
+}
+.lego small { opacity: 0.9; font-weight: 500; }
+.lego-blue { background: var(--primary); }
+.lego-teal { background: var(--teal); }
+.lego-coral { background: var(--coral); }
+
+.easy-bullets { padding-left: 18px; margin: 6px 0; }
+.easy-bullets li { margin-bottom: 10px; font-size: 0.92rem; }
+
 @media (max-width: 860px) {
-  .hero-card, .two-col, .roadmap-grid, .script-grid, .quiz-options, .drill-choices {
+  .hero-card, .two-col, .roadmap-grid, .script-grid, .quiz-options, .drill-choices, .kid-compare, .four-grid, .recipe-grid {
     grid-template-columns: 1fr;
   }
   .num-grid { grid-template-columns: repeat(2, 1fr); }

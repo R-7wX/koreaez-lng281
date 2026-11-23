@@ -39,6 +39,10 @@
       <span class="tab-icon">🧭</span>
       <span>แผน 3 ชม.</span>
     </button>
+    <button class="nav-tab" data-tab="easy">
+      <span class="tab-icon">🐣</span>
+      <span>สอนแบบเข้าใจง่ายสุดๆ</span>
+    </button>
     <button class="nav-tab" data-tab="grammar">
       <span class="tab-icon">📘</span>
       <span>ชม. 1: ไวยากรณ์</span>
@@ -66,8 +70,8 @@
           <h2>แผนพิชิตข้อสอบ Final 40 คะแนน ภายใน 3 ชั่วโมง</h2>
           <p>สรุปตรงจากเอกสารอาจารย์ทั้ง 14 ครั้ง เฉลย Study Review 1–18 หนังสือ Sogang 1A และไฟล์เสียง Track 32 พร้อมระบบอ่านออกเสียงเกาหลีในตัวทุกคำ</p>
           <div class="hero-buttons">
-            <button class="btn btn-primary" onclick="switchTab('grammar')">เริ่มชั่วโมงที่ 1: ไวยากรณ์ →</button>
-            <button class="btn btn-coral" onclick="switchTab('numbers')">ลุยตัวเลขเกาหลี-จีน (เน้นออกสอบ!)</button>
+            <button class="btn btn-coral" onclick="switchTab('easy')">🐣 เริ่มอ่าน "สอนแบบเข้าใจง่ายสุดๆ" ก่อน!</button>
+            <button class="btn btn-primary" onclick="switchTab('grammar')">ชม. 1: ไวยากรณ์ →</button>
             <button class="btn btn-outline" onclick="switchTab('exam')">ทดลองสอบ 3 พาร์ททันที</button>
           </div>
         </div>
@@ -153,6 +157,232 @@
             <div>
               <strong>พี่ชาย / พี่สาว ขึ้นอยู่กับเพศคนพูด!</strong>
               <p>ผู้หญิงเรียก <span class="kr">오빠</span> (พี่ชาย) / <span class="kr">언니</span> (พี่สาว) • ผู้ชายเรียก <span class="kr">형</span> (พี่ชาย) / <span class="kr">누나</span> (พี่สาว)</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TAB EASY: KID-FRIENDLY EXPLAINER ==================== -->
+    <section id="tab-easy" class="tab-panel">
+      <div class="section-header">
+        <div>
+          <span class="eyebrow">🐣 ฉบับเข้าใจง่ายเหมือนเล่าให้เด็กฟัง (อ่าน 10 นาที เก็ตทั้งเทอม!)</span>
+          <h2>สรุปภาษาเกาหลี LNG281 แบบไม่ต้องท่องจำยาก</h2>
+          <p>มีคำอ่านภาษาไทย + สูตรลัดจำแม่นๆ + คลิกปุ่ม 🔊 ฟังเสียงเกาหลีได้ทุกประโยค</p>
+        </div>
+        <button class="btn btn-primary" onclick="switchTab('grammar')">เข้าใจแล้ว! ลุยแบบฝึกหัด ชม. 1 →</button>
+      </div>
+
+      <!-- Lesson 1: The Magic Circle Rule -->
+      <div class="card easy-card easy-teal">
+        <div class="easy-badge">บทที่ 1 • กฎวิเศษข้อเดียวที่แก้ข้อสอบได้ครึ่งเล่ม!</div>
+        <h3>⭕ สูตร "มองข้างล่าง → เอาวงกลม ㅇ มารับ!"</h3>
+        <p>ภาษาเกาหลีจะมีคำต่อท้ายเป็นคู่ๆ เสมอ (เช่น <span class="kr">이에요/예요</span>, <span class="kr">이/가</span>, <span class="kr">은/는</span>, <span class="kr">을/를</span>) เด็กหลายคนงงว่าเลือกตัวไหนดี... <strong>วิธีดูง่ายนิดเดียว!</strong></p>
+
+        <div class="kid-compare">
+          <div class="kid-box kid-yes">
+            <div class="kid-title">🧱 ถ้าพยางค์สุดท้าย "มีตัวรองข้างล่าง" (มีตัวสะกด)</div>
+            <div class="kid-demo">
+              <div class="char-anatomy">
+                <span class="kr big-char">학생</span>
+                <span class="anatomy-arrow">↑ มีตัว <strong class="kr">ㅇ</strong> อยู่ชั้นล่าง!</span>
+              </div>
+              <p>ให้เลือกตัวที่ขึ้นต้นด้วย <strong>วงกลม ⭕ (<span class="kr">ㅇ</span>)</strong> เสมอ!</p>
+              <div class="kid-chips">
+                <button class="speak-chip" onclick="speak('학생이에요')">🔊 학생<strong>이에요</strong> (ฮัก-แซง-อี-เอ-โย)</button>
+                <button class="speak-chip" onclick="speak('학생이')">🔊 학생<strong>이</strong> (ฮัก-แซง-อี)</button>
+                <button class="speak-chip" onclick="speak('학생은')">🔊 학생<strong>은</strong> (ฮัก-แซง-อึน)</button>
+                <button class="speak-chip" onclick="speak('라면을')">🔊 라면<strong>을</strong> (รา-มยอน-อึล)</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="kid-box kid-no">
+            <div class="kid-title">☁️ ถ้าพยางค์สุดท้าย "ข้างล่างโล่งๆ" (ไม่มีตัวสะกด)</div>
+            <div class="kid-demo">
+              <div class="char-anatomy">
+                <span class="kr big-char">의사</span>
+                <span class="anatomy-arrow">↑ ข้างล่าง <strong class="kr">사</strong> โล่งเลย!</span>
+              </div>
+              <p>ให้เลือกตัวที่ <strong>ไม่มีวงกลม</strong> มาต่อท้าย!</p>
+              <div class="kid-chips">
+                <button class="speak-chip" onclick="speak('의사예요')">🔊 의사<strong>예요</strong> (อึย-ซา-เย-โย)</button>
+                <button class="speak-chip" onclick="speak('의자가')">🔊 의자<strong>가</strong> (อึย-จา-กา)</button>
+                <button class="speak-chip" onclick="speak('저는')">🔊 저<strong>는</strong> (ชอ-นึน)</button>
+                <button class="speak-chip" onclick="speak('사과를')">🔊 사과<strong>를</strong> (ซา-กวา-รึล)</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="kid-memory">🧠 <strong>ท่องในใจ 3 วิ:</strong> <em>"มีฐานข้างล่าง = เอาวงกลม ㅇ (อี-อึน-อึล-อีเอโย) มารับ!"</em> — แค่นี้ทำ Part 2 ถูกไปเกือบ 10 ข้อแล้ว!</div>
+      </div>
+
+      <!-- Lesson 2: 4 Magic Endings -->
+      <div class="card easy-card easy-blue">
+        <div class="easy-badge">บทที่ 2 • 4 คำลงท้ายที่ใช้พูดได้แทบทุกเรื่อง</div>
+        <h3>💬 แค่จำ 4 คำนี้ ก็แต่งประโยคได้เป็นร้อยประโยค!</h3>
+        <div class="four-grid">
+          <div class="mini-story">
+            <div class="story-emoji">🏷️</div>
+            <strong>1. "คือ / เป็น"</strong>
+            <div class="kr story-kr">이에요 / 예요</div>
+            <div class="story-read">(อี-เอ-โย / เย-โย)</div>
+            <p>เอาไว้แปะหลังชื่อ อาชีพ สิ่งของ</p>
+            <button class="speak-chip" onclick="speak('저는 태국 사람이에요.')">🔊 ฉันเป็นคนไทย</button>
+          </div>
+          <div class="mini-story">
+            <div class="story-emoji">📦</div>
+            <strong>2. "มี / ไม่มี (อยู่ / ไม่อยู่)"</strong>
+            <div class="kr story-kr">있어요 / 없어요</div>
+            <div class="story-read">(อิด-ซอ-โย / ออบ-ซอ-โย)</div>
+            <p>ใช้ได้ทั้ง "มีของ" และ "อยู่ที่ไหน"</p>
+            <button class="speak-chip" onclick="speak('서점에 있어요.')">🔊 อยู่ที่ร้านหนังสือ</button>
+          </div>
+          <div class="mini-story">
+            <div class="story-emoji">❤️</div>
+            <strong>3. "ชอบ / ไม่ชอบ"</strong>
+            <div class="kr story-kr">좋아해요 / 싫어해요</div>
+            <div class="story-read">(โช-อา-แฮ-โย / ชี-รอ-แฮ-โย)</div>
+            <p>จำ: <strong>โช-อา</strong> = ชอบอ่า! 👍<br/><strong>ชี-รอ</strong> = ชิ! ไม่เอาหรอก! 👎</p>
+            <button class="speak-chip" onclick="speak('사과를 좋아해요.')">🔊 ชอบแอปเปิ้ล</button>
+          </div>
+          <div class="mini-story">
+            <div class="story-emoji">🍽️</div>
+            <strong>4. "ขอ...หน่อยครับ/ค่ะ"</strong>
+            <div class="kr story-kr">주세요</div>
+            <div class="story-read">(ชู-เซ-โย)</div>
+            <p>เอาไว้สั่งอาหารหรือขอของที่ร้าน</p>
+            <button class="speak-chip" onclick="speak('물 좀 주세요.')">🔊 ขอน้ำหน่อยครับ</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Lesson 3: Two Number Gangs -->
+      <div class="card easy-card easy-coral">
+        <div class="easy-badge">บทที่ 3 • นิทาน 2 แก๊งตัวเลข (อาจารย์ย้ำออกสอบหนักมาก!)</div>
+        <h3>🔢 ทำไมเกาหลีมีเลข 2 แบบ? จำแบบ "2 แก๊ง" ง่ายกว่าเยอะ!</h3>
+
+        <div class="kid-compare">
+          <div class="kid-box kid-yes">
+            <div class="kid-title">🟢 แก๊ง 1: เลขเกาหลีแท้ = "แก๊งนับของใกล้ตัว"</div>
+            <p>ใช้ตอน <strong>ชี้นิ้วนับของที่จับได้</strong> + <strong>อายุ</strong> + <strong>เข็มสั้น (ชั่วโมง)</strong></p>
+            <div class="pron-strip">
+              <button class="speak-chip" onclick="speak('하나')">1 하나 (ฮา-นา → <strong>한</strong>)</button>
+              <button class="speak-chip" onclick="speak('둘')">2 둘 (ทุล → <strong>두</strong>)</button>
+              <button class="speak-chip" onclick="speak('셋')">3 셋 (เซ็ต → <strong>세</strong>)</button>
+              <button class="speak-chip" onclick="speak('넷')">4 넷 (เน็ต → <strong>네</strong>)</button>
+              <button class="speak-chip" onclick="speak('다섯')">5 다섯 (ทา-ซอต)</button>
+              <button class="speak-chip" onclick="speak('여섯')">6 여섯 (ยอ-ซอต)</button>
+              <button class="speak-chip" onclick="speak('일곱')">7 일곱 (อิล-กบ)</button>
+              <button class="speak-chip" onclick="speak('여덟')">8 여덟 (ยอ-ดอล)</button>
+              <button class="speak-chip" onclick="speak('아홉')">9 아홉 (อา-ฮบ)</button>
+              <button class="speak-chip" onclick="speak('열')">10 열 (ยอล)</button>
+            </div>
+            <div class="kid-memory" style="margin-top:10px">✨ <strong>ทริกตัวแปลงร่าง:</strong> เลข <strong>1, 2, 3, 4, 20</strong> พอมีลักษณะนาม (개, 명, 살, 시) มายืนข้างหลัง มันจะเขินจนตัดหางสั้นลงเป็น <strong class="kr">한, 두, 세, 네, 스무</strong>!</div>
+          </div>
+
+          <div class="kid-box kid-no">
+            <div class="kid-title">🔴 แก๊ง 2: เลขจีน = "แก๊งตัวเลขบนป้าย/หน้าจอ"</div>
+            <p>ใช้กับ <strong>ป้ายราคา (원), เบอร์โทร (번), ปฏิทิน (วัน/เดือน/ปี), เลขชั้นลิฟต์ (층), นาที (분)</strong></p>
+            <div class="pron-strip">
+              <button class="speak-chip" onclick="speak('공')">0 공 (คง)</button>
+              <button class="speak-chip" onclick="speak('일')">1 일 (อิล)</button>
+              <button class="speak-chip" onclick="speak('이')">2 이 (อี)</button>
+              <button class="speak-chip" onclick="speak('삼')">3 삼 (ซัม)</button>
+              <button class="speak-chip" onclick="speak('사')">4 사 (ซา)</button>
+              <button class="speak-chip" onclick="speak('오')">5 오 (โอ)</button>
+              <button class="speak-chip" onclick="speak('육')">6 육 (ยุก)</button>
+              <button class="speak-chip" onclick="speak('칠')">7 칠 (ชิล)</button>
+              <button class="speak-chip" onclick="speak('팔')">8 팔 (พัล)</button>
+              <button class="speak-chip" onclick="speak('구')">9 구 (คู)</button>
+              <button class="speak-chip" onclick="speak('십')">10 십 (ชิบ)</button>
+              <button class="speak-chip" onclick="speak('백')">100 백 (แพ็ก)</button>
+              <button class="speak-chip" onclick="speak('천')">1,000 천 (ชอน)</button>
+              <button class="speak-chip" onclick="speak('만')">10,000 만 (มัน)</button>
+            </div>
+            <div class="kid-memory" style="margin-top:10px">🚨 <strong>2 เดือนตัวป่วน:</strong> เดือน 6 อ่าน <button class="speak-chip" onclick="speak('유월')">🔊 유월 (ยู-วอล)</button> • เดือน 10 อ่าน <button class="speak-chip" onclick="speak('시월')">🔊 시월 (ชี-วอล)</button> (ตัดตัวสะกดทิ้ง!)</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Lesson 4: Step-by-step Recipes for Time, Money, Phone -->
+      <div class="card easy-card easy-amber">
+        <div class="easy-badge">บทที่ 4 • สูตรประกอบร่าง 3 เรื่องที่ออกเขียน Part 3 แน่นอน!</div>
+        <h3>🧩 ประกอบร่างเหมือนต่อเลโก้ (ดูตัวอย่างแล้วทำตามได้เลย)</h3>
+
+        <div class="recipe-grid">
+          <div class="recipe-box">
+            <h4>⏰ ต่อเลโก้ "บอกเวลา"</h4>
+            <div class="lego-row">
+              <span class="lego lego-blue">เช้า 오전<br/><small>บ่าย 오후</small></span>
+              <span>+</span>
+              <span class="lego lego-teal">เลขเกาหลี<br/><small>+ 시 (ชี)</small></span>
+              <span>+</span>
+              <span class="lego lego-coral">เลขจีน<br/><small>+ 분 (พุน)</small></span>
+            </div>
+            <p class="muted" style="margin:8px 0 4px">ตัวอย่าง <strong>08:30 (เช้า)</strong>:</p>
+            <button class="speak-chip" onclick="speak('오전 여덟 시 삼십 분이에요.')">🔊 오전 여덟 시 삼십 분이에요 (โอ-จอน ยอ-ดอล-ชี ซัม-ชิบ-พุน-อี-เอ-โย)</button>
+            <p class="muted" style="margin:4px 0 0">💡 ถ้า 30 นาที พูดสั้นๆ ว่า <button class="speak-chip" onclick="speak('오전 여덟 시 반이에요.')">🔊 ...여덟 시 반이에요 (ครึ่ง)</button> ได้เลย!</p>
+          </div>
+
+          <div class="recipe-box">
+            <h4>💰 ต่อเลโก้ "บอกราคา (วอน)"</h4>
+            <div class="lego-row">
+              <span class="lego lego-coral">หลักหมื่น<br/><small>만 (มัน)</small></span>
+              <span>+</span>
+              <span class="lego lego-coral">หลักพัน<br/><small>천 (ชอน)</small></span>
+              <span>+</span>
+              <span class="lego lego-coral">หลักร้อย<br/><small>백 (แพ็ก)</small></span>
+              <span>+</span>
+              <span class="lego lego-blue">원이에요</span>
+            </div>
+            <p class="muted" style="margin:8px 0 4px">ตัวอย่าง <strong>₩17,000</strong> = 10,000 (만) + 7,000 (칠천):</p>
+            <button class="speak-chip" onclick="speak('만 칠천 원이에요.')">🔊 만 칠천 원이에요 (มัน ชิล-ชอน วอน-อี-เอ-โย)</button>
+            <p class="muted" style="margin:4px 0 0">⚠️ จำง่าย: <strong>เลข 1 หน้า ร้อย/พัน/หมื่น ห้ามพูด 일!</strong></p>
+          </div>
+
+          <div class="recipe-box">
+            <h4>📞 ต่อเลโก้ "บอกเบอร์โทร"</h4>
+            <div class="lego-row">
+              <span class="lego lego-coral">0 = 공 (คง)</span>
+              <span>+</span>
+              <span class="lego lego-blue">ขีด - = 에 (เอ)</span>
+              <span>+</span>
+              <span class="lego lego-coral">อ่านทีละตัว!</span>
+            </div>
+            <p class="muted" style="margin:8px 0 4px">ตัวอย่าง <strong>010-5337-3010</strong>:</p>
+            <button class="speak-chip" onclick="speak('공일공에 오삼삼칠에 삼공일공이에요.')">🔊 공일공에 오삼삼칠에 삼공일공이에요</button>
+            <p class="muted" style="margin:4px 0 0">(คง-อิล-คง-เอ / โอ-ซัม-ซัม-ชิล-เอ / ซัม-คง-อิล-คง-อี-เอ-โย)</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Lesson 5: Super easy Goodbye & Family tricks -->
+      <div class="card easy-card easy-purple">
+        <div class="easy-badge">บทที่ 5 • ทริกจำคำลา + ตำแหน่ง + ครอบครัว ใน 1 นาที</div>
+        <div class="two-col">
+          <div>
+            <h4>👋 คำลา 2 แบบ (จำจากตัวอักษรไทยเลย!)</h4>
+            <ul class="easy-bullets">
+              <li><button class="speak-chip" onclick="speak('안녕히 가세요.')">🔊 안녕히 <strong>가</strong>세요 (อัน-นยอง-ฮี <strong>กา</strong>-เซ-โย)</button><br/>→ <strong>"กา" = ก้าวขาไป!</strong> ใช้บอกคนที่กำลังจะเดินไป</li>
+              <li><button class="speak-chip" onclick="speak('안녕히 계세요.')">🔊 안녕히 <strong>계</strong>세요 (อัน-นยอง-ฮี <strong>เค</strong>-เซ-โย)</button><br/>→ <strong>"เค" = แค่ยืนอยู่ตรงนี้!</strong> ใช้บอกคนที่อยู่ต่อ</li>
+            </ul>
+            <h4 style="margin-top:14px">📍 สูตรวางคำบอกตำแหน่ง (กลับด้านกับภาษาไทย!)</h4>
+            <p>ภาษาไทยพูด: <em>"บน + โต๊ะ"</em><br/>ภาษาเกาหลีพูดสลับกัน: <strong>"โต๊ะ + บน + 에 있어요"</strong></p>
+            <button class="speak-chip" onclick="speak('가방이 책상 위에 있어요.')">🔊 가방이 책상 위에 있어요 (กระเป๋าอยู่บนโต๊ะ)</button>
+          </div>
+          <div>
+            <h4>👨‍👩‍👧‍👦 สูตรเรียกพี่ชาย / พี่สาว (ดูว่า "ตัวเรา" เป็นเพศไหน!)</h4>
+            <ul class="easy-bullets">
+              <li>👩 ถ้าเราเป็น <strong>ผู้หญิง</strong>: พี่ชาย = <button class="speak-chip" onclick="speak('오빠')">🔊 오빠 (โอป-ป้า)</button> / พี่สาว = <button class="speak-chip" onclick="speak('언니')">🔊 언니 (ออน-นี่)</button></li>
+              <li>👨 ถ้าเราเป็น <strong>ผู้ชาย</strong>: พี่ชาย = <button class="speak-chip" onclick="speak('형')">🔊 형 (ฮยอง)</button> / พี่สาว = <button class="speak-chip" onclick="speak('누나')">🔊 누나 (นู-น่า)</button></li>
+              <li>👶 น้อง: น้องชาย = <button class="speak-chip" onclick="speak('남동생')">🔊 남동생 (นัม-ดง-แซง)</button> / น้องสาว = <button class="speak-chip" onclick="speak('여동생')">🔊 여동생 (ยอ-ดง-แซง)</button></li>
+              <li>👴👵 ปู่/ย่า: <button class="speak-chip" onclick="speak('할아버지')">🔊 할아버지 (ฮา-รา-บอ-จี)</button> / <button class="speak-chip" onclick="speak('할머니')">🔊 할머니 (ฮัล-มอ-นี)</button></li>
+            </ul>
+            <div style="margin-top:14px">
+              <button class="btn btn-primary" onclick="switchTab('numbers')">ไปฝึกตัวเลขแบบ Interactive เลย! →</button>
+              <button class="btn btn-coral" onclick="switchTab('exam')">ลองทำข้อสอบจำลอง →</button>
             </div>
           </div>
         </div>
