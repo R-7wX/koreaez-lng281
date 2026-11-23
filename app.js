@@ -7,6 +7,211 @@ let timerInterval = null;
 let currentVocabCat = 'ทั้งหมด';
 let currentNumDrillMode = 'time';
 
+// ==================== KOREAN TO THAI PRONUNCIATION ENGINE ====================
+const CHO_TH = ['ค', 'ก', 'น', 'ท', 'ต', 'ร', 'ม', 'พ', 'ป', 'ซ', 'ซ', 'อ', 'ช', 'จ', 'ช', 'ค', 'ท', 'พ', 'ฮ'];
+const CHO_MID = ['ก', 'ก', 'น', 'ด', 'ต', 'ร', 'ม', 'บ', 'ป', 'ซ', 'ซ', 'อ', 'จ', 'จ', 'ช', 'ค', 'ท', 'พ', 'ฮ'];
+const JONG_TH = [
+  '', 'ก', 'ก', 'ก', 'น', 'น', 'น', 'ด', 'ล', 'ก', 'ม', 'ล', 'ล', 'ล', 'ล', 'ล',
+  'ม', 'บ', 'บ', 'ด', 'ด', 'ง', 'ด', 'ด', 'ก', 'ด', 'บ', 'ด'
+];
+const JONG_TO_CHO = {
+  1: 0, 2: 1, 4: 2, 7: 3, 8: 5, 16: 6, 17: 7, 19: 9, 20: 10, 22: 12, 23: 14, 24: 15, 25: 16, 26: 17
+};
+
+const KR_READ_OVERRIDES = [
+  ['안녕히 가세요', 'อัน-นยอง-ฮี กา-เซ-โย'],
+  ['안녕히 계세요', 'อัน-นยอง-ฮี เค-เซ-โย'],
+  ['안녕하세요', 'อัน-นยอง-ฮา-เซ-โย'],
+  ['감사합니다', 'คัม-ซา-ฮัม-นี-ดา'],
+  ['반갑습니다', 'พัน-กับ-ซึม-นี-ดา'],
+  ['실례합니다', 'ชิล-เล-ฮัม-นี-ดา'],
+  ['실례지만', 'ชิล-เล-จี-มัน'],
+  ['좋아해요', 'โช-อา-แฮ-โย'],
+  ['싫어해요', 'ชี-รอ-แฮ-โย'],
+  ['있어요', 'อิด-ซอ-โย'],
+  ['없어요', 'ออบ-ซอ-โย'],
+  ['이에요', 'อี-เอ-โย'],
+  ['예요', 'เย-โย'],
+  ['아니에요', 'อา-นี-เอ-โย'],
+  ['뭐예요', 'มวอ-เย-โย'],
+  ['거예요', 'กอ-เย-โย'],
+  ['여덟', 'ยอ-ดอล'],
+  ['며칠', 'มยอ-ชิล'],
+  ['몇', 'มยอด'],
+  ['유월', 'ยู-วอล'],
+  ['시월', 'ชี-วอล'],
+  ['십일월', 'ชี-บี-รวอล'],
+  ['십이월', 'ชี-บี-วอล'],
+  ['전화번호', 'ชอน-ฮวา-บอน-โฮ'],
+  ['핸드폰', 'แฮน-ดือ-พน'],
+  ['한국어', 'ฮัน-กู-กอ'],
+  ['일본어', 'อิล-โบ-นอ'],
+  ['중국어', 'ชุง-กู-กอ'],
+  ['영어', 'ยอง-ออ'],
+  ['화장실', 'ฮวา-จัง-ชิล'],
+  ['의사', 'อึย-ซา'],
+  ['의자', 'อึย-จา'],
+  ['사과', 'ซา-กวา'],
+  ['고마워요', 'โค-มา-วอ-โย'],
+  ['미안해요', 'มี-อัน-แฮ-โย'],
+  ['맞아요', 'มา-จา-โย'],
+  ['알아요', 'อา-รา-โย'],
+  ['주세요', 'ชู-เซ-โย'],
+  ['드릴까요', 'ทือ-ริล-กา-โย'],
+  ['어디에', 'ออ-ดี-เอ'],
+  ['어느', 'ออ-นือ'],
+  ['얼마예요', 'ออล-มา-เย-โย'],
+  ['생일', 'แซง-อิล'],
+  ['축하합니다', 'ชุก-คา-ฮัม-นี-ดา'],
+  ['할아버지', 'ฮา-รา-บอ-จี'],
+  ['할머니', 'ฮัล-มอ-นี'],
+  ['아버지', 'อา-บอ-จี'],
+  ['어머니', 'ออ-มอ-นี'],
+  ['부모님', 'พู-โม-นิม'],
+  ['오빠', 'โอป-ป้า'],
+  ['언니', 'ออน-นี่'],
+  ['누나', 'นู-น่า'],
+  ['남동생', 'นัม-ดง-แซง'],
+  ['여동생', 'ยอ-ดง-แซง'],
+  ['막내', 'มัง-แน'],
+  ['학년', 'ฮัง-นยอน'],
+  ['영화관', 'ยอง-ฮวา-กวัน'],
+  ['도서관', 'โท-ซอ-กวัน'],
+  ['우체국', 'อู-เช-กุก'],
+  ['문구점', 'มุน-กู-จอม'],
+  ['서점', 'ซอ-จอม'],
+  ['식당', 'ชิก-ตัง'],
+  ['병원', 'พยอง-วอน'],
+  ['은행', 'อึน-แฮง'],
+  ['회사원', 'ฮเว-ซา-วอน'],
+  ['은행원', 'อึน-แฮง-วอน'],
+  ['선생님', 'ซอน-แซง-นิม'],
+  ['학생', 'ฮัก-แซง'],
+  ['요리사', 'โย-รี-ซา'],
+  ['간호사', 'คัน-โฮ-ซา'],
+  ['컴퓨터', 'คอม-พยู-ทอ'],
+  ['텔레비전', 'เทล-เล-บี-จอน'],
+  ['냉장고', 'แนง-จัง-โก'],
+  ['아메리카노', 'อา-เม-รี-คา-โน'],
+  ['크루아상', 'คือ-รู-อา-ซัง'],
+  ['샌드위치', 'แซน-ดือ-วี-ชี'],
+  ['김치찌개', 'คิม-ชี-จี-แก'],
+  ['된장찌개', 'ทเวน-จัง-จี-แก'],
+  ['삼계탕', 'ซัม-กเย-ทัง'],
+  ['비빔밥', 'พี-บิม-บับ'],
+  ['냉면', 'แนง-มยอน'],
+  ['불고기', 'พุล-โก-กี']
+];
+
+function syllableToThai(cho, jung, jong, isWordStart) {
+  let c = isWordStart ? CHO_TH[cho] : CHO_MID[cho];
+  // ㅅ before ㅣ/ㅑ/ㅕ/ㅛ/ㅠ sounds like ช
+  if ((cho === 9 || cho === 10) && [2, 6, 12, 17, 20].includes(jung)) c = 'ช';
+  const f = JONG_TH[jong];
+  const hasF = f !== '';
+
+  switch (jung) {
+    case 0: return hasF ? `${c}ั${f}` : `${c}า`;           // ㅏ
+    case 1: return `แ${c}${f}`;                              // ㅐ
+    case 2: return hasF ? `${c}ั${f}` === `${c}ั${f}` ? (cho === 11 ? `ยั${f}` : `${c}ยั${f}`) : '' : (cho === 11 ? 'ยา' : `${c}ยา`); // ㅑ
+    case 3: return cho === 11 ? `แย${f}` : `แ${c}ย${f}`;    // ㅒ
+    case 4: return `${c}อ${f}`;                              // ㅓ
+    case 5: return `เ${c}${f}`;                              // ㅔ
+    case 6: return cho === 11 ? `ยอ${f}` : `${c}ยอ${f}`;    // ㅕ
+    case 7: return cho === 11 ? `เย${f}` : `เ${c}ย${f}`;    // ㅖ
+    case 8: return hasF ? `${c}${f === 'ง' || f === 'น' || f === 'ม' ? '' : 'โ'}${f}` : `โ${c}`; // ㅗ (fix below)
+    case 9: return hasF ? `${c}วั${f}` : `${c}วา`;           // ㅘ
+    case 10: return `แ${c}ว${f}`;                            // ㅙ
+    case 11: return `เ${c}ว${f}`;                            // ㅚ
+    case 12: return cho === 11 ? (hasF ? `ยง` : 'โย') : `โ${c}ย${f}`; // ㅛ
+    case 13: return hasF ? `${c}ุ${f}` : `${c}ู`;            // ㅜ
+    case 14: return `${c}วอ${f}`;                            // ㅝ
+    case 15: return `เ${c}ว${f}`;                            // ㅞ
+    case 16: return `${c}วี${f}`;                            // ㅟ
+    case 17: return cho === 11 ? (hasF ? `ยุ${f}` : 'ยู') : `${c}ยู${f}`; // ㅠ
+    case 18: return hasF ? `${c}ึ${f}` : `${c}ือ`;           // ㅡ
+    case 19: return `${c}ึย${f}`;                            // ㅢ
+    case 20: return hasF ? `${c}ิ${f}` : `${c}ี`;            // ㅣ
+    default: return c + f;
+  }
+}
+
+function hangulWordToThai(word) {
+  const chars = [...word];
+  const syls = chars.map(ch => {
+    const code = ch.charCodeAt(0);
+    if (code >= 0xAC00 && code <= 0xD7A3) {
+      const idx = code - 0xAC00;
+      return {
+        isKr: true,
+        cho: Math.floor(idx / 588),
+        jung: Math.floor((idx % 588) / 28),
+        jong: idx % 28
+      };
+    }
+    return { isKr: false, ch };
+  });
+
+  // Apply simple liaison (연음화): single batchim + ㅇ
+  for (let i = 0; i < syls.length - 1; i++) {
+    if (syls[i].isKr && syls[i + 1].isKr && syls[i].jong > 0 && syls[i + 1].cho === 11) {
+      if (JONG_TO_CHO[syls[i].jong] !== undefined) {
+        syls[i + 1].cho = JONG_TO_CHO[syls[i].jong];
+        syls[i].jong = 0;
+      }
+    }
+  }
+
+  const out = [];
+  for (let i = 0; i < syls.length; i++) {
+    const s = syls[i];
+    if (!s.isKr) { out.push(s.ch); continue; }
+    // Fix ㅗ + batchim (e.g. 공 -> คง, 돈 -> ทน, 옷 -> โอด)
+    let th = '';
+    if (s.jung === 8 && s.jong > 0) {
+      const c = i === 0 ? CHO_TH[s.cho] : CHO_MID[s.cho];
+      th = `${c}${JONG_TH[s.jong]}`;
+      if (s.cho === 11) th = `โ${c}${JONG_TH[s.jong]}`;
+    } else if (s.jung === 12 && s.jong > 0) {
+      const c = s.cho === 11 ? 'ย' : `${i === 0 ? CHO_TH[s.cho] : CHO_MID[s.cho]}ย`;
+      th = `${c}${JONG_TH[s.jong]}`;
+    } else {
+      th = syllableToThai(s.cho, s.jung, s.jong, i === 0);
+    }
+    out.push(th);
+  }
+  return out.join('-').replace(/-([^ก-๛])-/g, '$1').replace(/-([.,?!])/g, '$1');
+}
+
+function hangulToThai(text) {
+  if (!text || !/[가-힣]/.test(text)) return '';
+  let s = String(text);
+  // Replace known natural overrides with placeholders first
+  const tokens = [];
+  for (const [kr, th] of KR_READ_OVERRIDES) {
+    if (s.includes(kr)) {
+      const key = `§${tokens.length}§`;
+      tokens.push(th);
+      s = s.split(kr).join(key);
+    }
+  }
+  // Convert remaining Hangul runs
+  s = s.replace(/[가-힣]+/g, m => hangulWordToThai(m));
+  // Restore placeholders
+  tokens.forEach((th, idx) => {
+    s = s.split(`§${idx}§`).join(th);
+  });
+  return s.replace(/\s+/g, ' ').trim();
+}
+
+function readTag(krText, block = false) {
+  const th = hangulToThai(krText);
+  if (!th) return '';
+  return block
+    ? `<span class="th-read-block">(${th})</span>`
+    : `<span class="th-read">(${th})</span>`;
+}
+
 function loadState() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
@@ -272,16 +477,18 @@ function renderGrammarSections() {
     <div class="pos-card" onclick="speak('${p.ex}')">
       <div class="pos-svg">${getPositionSVG(p.svg)}</div>
       <div class="pos-kr kr">${p.kr}</div>
+      ${readTag(p.kr, true)}
       <div class="pos-th">${p.th}</div>
       <div class="muted kr" style="font-size:0.78rem;margin-top:4px">🔊 ${p.ex}</div>
+      ${readTag(p.ex, true)}
     </div>
   `).join('');
 
   // Key Q&A
   document.getElementById('qa-list').innerHTML = KEY_QA.map(item => `
     <div class="qa-item">
-      <div><button class="speak-btn" onclick="speak('${item.q}')">🔊</button> <strong class="kr">A: ${item.q}</strong> <span class="muted">(${item.th})</span></div>
-      <div style="margin-top:4px"><button class="speak-btn" onclick="speak('${item.a}')">🔊</button> <span class="kr">B: ${item.a}</span></div>
+      <div><button class="speak-btn" onclick="speak('${item.q}')">🔊</button> <strong class="kr">A: ${item.q}</strong> ${readTag(item.q)} <span class="muted">(${item.th})</span></div>
+      <div style="margin-top:4px"><button class="speak-btn" onclick="speak('${item.a}')">🔊</button> <span class="kr">B: ${item.a}</span> ${readTag(item.a)}</div>
     </div>
   `).join('');
 
@@ -323,6 +530,7 @@ function renderNumberTables() {
     <div class="num-tile" onclick="speak('${n.kr}')">
       <div class="num-digit">${n.d}</div>
       <div class="num-word kr">${n.kr}</div>
+      ${readTag(n.kr, true)}
       <div class="num-alt kr">${n.alt || '&nbsp;'}</div>
     </div>
   `).join('');
@@ -331,22 +539,23 @@ function renderNumberTables() {
     <div class="num-tile" onclick="speak('${n.kr.split('/')[0]}')">
       <div class="num-digit">${n.d}</div>
       <div class="num-word kr">${n.kr}</div>
+      ${readTag(n.kr, true)}
       <div class="num-alt">${n.alt || '&nbsp;'}</div>
     </div>
   `).join('');
 
   document.getElementById('counters-grid').innerHTML = COUNTERS.map(c => `
     <div class="counter-chip" onclick="speak('${c.ex}')">
-      <div class="counter-kr kr">${c.kr} <span style="font-size:0.72rem;color:var(--muted)">(${c.sys})</span></div>
+      <div class="counter-kr kr">${c.kr} ${readTag(c.kr)} <span style="font-size:0.72rem;color:var(--muted)">(${c.sys})</span></div>
       <div class="counter-th">${c.th}</div>
-      <div class="kr" style="font-size:0.78rem;color:var(--primary)">🔊 ${c.ex}</div>
+      <div class="kr" style="font-size:0.78rem;color:var(--primary)">🔊 ${c.ex} ${readTag(c.ex)}</div>
     </div>
   `).join('');
 
   document.getElementById('months-grid').innerHTML = MONTHS.map(m => `
     <div class="month-chip ${m.trap ? 'trap' : ''}" onclick="speak('${m.kr}')">
       <span>${m.num}월 (${m.th})</span>
-      <strong class="kr">${m.kr}</strong>
+      <div style="text-align:right"><strong class="kr">${m.kr}</strong>${readTag(m.kr, true)}</div>
     </div>
   `).join('');
 }
@@ -464,7 +673,7 @@ function generateNumDrill(mode) {
     <div class="drill-prompt">${prompt}</div>
     <div class="drill-choices">
       ${shuffled.map((ch, i) => `
-        <button class="choice-btn kr" data-idx="${i}">${ch}</button>
+        <button class="choice-btn kr" data-idx="${i}" data-val="${ch}">${ch}${readTag(ch, true)}</button>
       `).join('')}
     </div>
     <div id="num-drill-fb" class="drill-feedback"></div>
@@ -478,11 +687,11 @@ function generateNumDrill(mode) {
     btn.addEventListener('click', () => {
       stage.querySelectorAll('.choice-btn').forEach(b => {
         b.disabled = true;
-        if (b.textContent === correct) b.classList.add('correct');
+        if (b.dataset.val === correct) b.classList.add('correct');
         else if (b === btn) b.classList.add('wrong');
       });
       const fb = document.getElementById('num-drill-fb');
-      if (btn.textContent === correct) {
+      if (btn.dataset.val === correct) {
         fb.style.color = 'var(--teal)';
         fb.textContent = '✅ ถูกต้อง! ' + explain;
       } else {
@@ -540,6 +749,7 @@ function renderVocabGrid() {
           <button class="speak-btn" onclick="event.stopPropagation(); speak('${v.kr}')">🔊</button>
         </div>
         <div class="vocab-kr kr">${v.kr}</div>
+        ${readTag(v.kr, true)}
         <div class="vocab-meaning hidden-meaning" data-meaning="${v.th}">แตะเพื่อดูคำแปล</div>
         <div class="vocab-actions">
           <button class="btn-tiny ${known ? 'btn-teal' : 'btn-outline'}" onclick="event.stopPropagation(); toggleKnownVocab('${v.kr}')">
@@ -599,7 +809,7 @@ function renderPart1Listening() {
         </div>
         <div class="quiz-explain ${answered ? 'show ' + (isCorrect ? 'ok' : 'bad') : ''}">
           <strong>${isCorrect ? '✅ ถูกต้อง!' : '❌ ยังไม่ถูก'}</strong> — ${item.explain}<br/>
-          <span class="kr"><strong>สคริปต์:</strong> ${item.script}</span>
+          <span class="kr"><strong>สคริปต์:</strong> ${item.script}</span> ${readTag(item.script, true)}
         </div>
       </div>
     `;
@@ -635,7 +845,7 @@ function renderPart2Quiz() {
               if (oIdx === item.ans) cls += ' correct';
               else if (oIdx === saved) cls += ' wrong';
             }
-            return `<button class="${cls}" ${answered ? 'disabled' : ''} onclick="answerPart2(${qIdx}, ${oIdx})">${oIdx + 1}) ${opt}</button>`;
+            return `<button class="${cls}" ${answered ? 'disabled' : ''} onclick="answerPart2(${qIdx}, ${oIdx})">${oIdx + 1}) ${opt}${/[가-힣]/.test(opt) ? readTag(opt, true) : ''}</button>`;
           }).join('')}
         </div>
         <div class="quiz-explain ${answered ? 'show ' + (isCorrect ? 'ok' : 'bad') : ''}">
@@ -682,7 +892,7 @@ function renderPart3Writing() {
           <button class="btn-tiny btn-primary" onclick="checkWriting('${item.id}')">ตรวจ</button>
         </div>
         <div class="helper-chips">
-          ${item.helpers.map(h => `<button class="helper-chip" onclick="appendHelper('${item.id}', '${h}')">+ ${h}</button>`).join('')}
+          ${item.helpers.map(h => `<button class="helper-chip" onclick="appendHelper('${item.id}', '${h}')">+ ${h} ${readTag(h)}</button>`).join('')}
           <button class="helper-chip" style="color:var(--coral)" onclick="document.getElementById('winput-${item.id}').value=''">ล้าง</button>
         </div>
         <div id="wfb-${item.id}" class="quiz-explain"></div>
@@ -753,6 +963,39 @@ function updateGlobalProgress() {
   document.getElementById('global-progress-pct').textContent = `${total}%`;
 }
 
+// ==================== READING TOGGLE & STATIC READINGS ====================
+function injectStaticReadings() {
+  // Add Thai readings to static Korean elements in Grammar/Dashboard/Track32 that don't already have Thai readings
+  document.querySelectorAll('#tab-grammar .speak-chip, #tab-grammar .example-list .kr, #tab-grammar .passage-kr, #tab-grammar .study-table td.kr, #tab-dashboard .trap-item .kr, .script-grid p').forEach(el => {
+    if (el.dataset.readInjected) return;
+    const txt = el.textContent || '';
+    if (!/[가-힣]/.test(txt)) return;
+    // Skip if already contains Thai pronunciation in parentheses
+    if (/\([ก-๛-]+/.test(txt)) return;
+    const krParts = txt.match(/[가-힣]+(?:\s+[가-힣]+)*/g);
+    if (!krParts) return;
+    const th = hangulToThai(krParts.join(' / '));
+    if (!th) return;
+    const span = document.createElement('span');
+    span.className = el.classList.contains('passage-kr') ? 'th-read-block' : 'th-read';
+    span.textContent = `(${th})`;
+    el.appendChild(span);
+    el.dataset.readInjected = '1';
+  });
+}
+
+const readingBtn = document.getElementById('reading-toggle');
+if (readingBtn) {
+  let showReadings = true;
+  readingBtn.addEventListener('click', () => {
+    showReadings = !showReadings;
+    document.body.classList.toggle('hide-readings', !showReadings);
+    readingBtn.textContent = showReadings ? '🔤 คำอ่านไทย: เปิด' : '🔤 คำอ่านไทย: ปิด';
+    readingBtn.classList.toggle('btn-teal', showReadings);
+    readingBtn.classList.toggle('btn-outline', !showReadings);
+  });
+}
+
 // ==================== INIT ====================
 updateTimerUI();
 renderRoadmap();
@@ -764,5 +1007,6 @@ renderVocabGrid();
 renderPart1Listening();
 renderPart2Quiz();
 renderPart3Writing();
+injectStaticReadings();
 updateExamScore();
 updateGlobalProgress();
