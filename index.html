@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LNG281 ติวสอบ Final ภาษาเกาหลี ภายใน 3 ชั่วโมง</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Noto+Sans+Thai:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-left">
+      <div class="brand-badge">LNG281</div>
+      <div>
+        <h1 class="brand-title">ติวสอบ Final ภาษาเกาหลี ภายใน 3 ชม.</h1>
+        <p class="brand-sub">Sogang 1A + ชีทครั้งที่ 1–14 + Study Review 1–18 (40 คะแนน)</p>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <div class="timer-box" title="ตัวจับเวลาติว 3 ชั่วโมง">
+        <span class="timer-label">เวลาติวคงเหลือ</span>
+        <span id="countdown-display" class="timer-value">03:00:00</span>
+        <div class="timer-actions">
+          <button id="timer-toggle" class="btn-tiny btn-primary">เริ่ม</button>
+          <button id="timer-reset" class="btn-tiny btn-ghost">รีเซ็ต</button>
+        </div>
+      </div>
+      <div class="progress-pill">
+        <span class="progress-pill-label">ความคืบหน้า</span>
+        <strong id="global-progress-pct">0%</strong>
+      </div>
+    </div>
+  </header>
+
+  <nav class="main-nav" aria-label="หมวดการเรียน">
+    <button class="nav-tab active" data-tab="dashboard">
+      <span class="tab-icon">🧭</span>
+      <span>แผน 3 ชม.</span>
+    </button>
+    <button class="nav-tab" data-tab="grammar">
+      <span class="tab-icon">📘</span>
+      <span>ชม. 1: ไวยากรณ์</span>
+    </button>
+    <button class="nav-tab" data-tab="numbers">
+      <span class="tab-icon">🔢</span>
+      <span>ชม. 2: ตัวเลข (เน้น!)</span>
+    </button>
+    <button class="nav-tab" data-tab="vocab">
+      <span class="tab-icon">🗂️</span>
+      <span>คลังคำศัพท์</span>
+    </button>
+    <button class="nav-tab" data-tab="exam">
+      <span class="tab-icon">🎯</span>
+      <span>ชม. 3: สอบจำลอง 3 พาร์ท</span>
+    </button>
+  </nav>
+
+  <main class="container">
+    <!-- ==================== TAB 1: DASHBOARD ==================== -->
+    <section id="tab-dashboard" class="tab-panel active">
+      <div class="hero-card">
+        <div class="hero-content">
+          <span class="eyebrow">FINAL EXAM CRASH COURSE • วันอังคารที่ 24 พฤศจิกายน</span>
+          <h2>แผนพิชิตข้อสอบ Final 40 คะแนน ภายใน 3 ชั่วโมง</h2>
+          <p>สรุปตรงจากเอกสารอาจารย์ทั้ง 14 ครั้ง เฉลย Study Review 1–18 หนังสือ Sogang 1A และไฟล์เสียง Track 32 พร้อมระบบอ่านออกเสียงเกาหลีในตัวทุกคำ</p>
+          <div class="hero-buttons">
+            <button class="btn btn-primary" onclick="switchTab('grammar')">เริ่มชั่วโมงที่ 1: ไวยากรณ์ →</button>
+            <button class="btn btn-coral" onclick="switchTab('numbers')">ลุยตัวเลขเกาหลี-จีน (เน้นออกสอบ!)</button>
+            <button class="btn btn-outline" onclick="switchTab('exam')">ทดลองสอบ 3 พาร์ททันที</button>
+          </div>
+        </div>
+        <div class="exam-blueprint">
+          <h3>โครงสร้างข้อสอบ Final (40 คะแนน)</h3>
+          <div class="blueprint-item">
+            <span class="bp-tag bp-mc">ตัวเลือก</span>
+            <div>
+              <strong>Part 1: Listening</strong>
+              <p>ฟังบทสนทนาสั้นๆ (เบอร์โทร, วันเกิด, ราคา, เวลา, สถานที่, สั่งอาหาร)</p>
+            </div>
+          </div>
+          <div class="blueprint-item">
+            <span class="bp-tag bp-mc">ตัวเลือก</span>
+            <div>
+              <strong>Part 2: Grammar + Vocab + Conversation</strong>
+              <p>ตัวชี้ 이/가, 은/는, 을/를, 에, 이에요/예요 + คำศัพท์ + บทสนทนา</p>
+            </div>
+          </div>
+          <div class="blueprint-item">
+            <span class="bp-tag bp-write">เขียน</span>
+            <div>
+              <strong>Part 3: Writing</strong>
+              <p>เขียนคำหรือประโยคจากรูป (ตำแหน่ง, เวลา, ราคา, จำนวน, ครอบครัว)</p>
+            </div>
+          </div>
+          <div class="trap-banner">
+            ⚠️ <strong>จุดเน้นพิเศษของอาจารย์:</strong> ตัวเลขทั้งหมด (เลขเกาหลี vs เลขจีน) + คำศัพท์ + การถามตอบ + บทสนทนา
+          </div>
+        </div>
+      </div>
+
+      <h3 class="section-heading">ตารางติวแบบจับเวลา 3 ชั่วโมง (เช็กลิสต์เมื่อเรียนจบแต่ละขั้น)</h3>
+      <div class="roadmap-grid" id="roadmap-grid"></div>
+
+      <div class="card quick-traps-card">
+        <h3>🚨 7 กับดักข้อสอบที่คนพลาดบ่อยสุด (ท่องก่อนเข้าห้องสอบ!)</h3>
+        <div class="traps-grid">
+          <div class="trap-item">
+            <div class="trap-num">1</div>
+            <div>
+              <strong>มิถุนายน & ตุลาคม (เลขจีน)</strong>
+              <p><span class="kr">6월 = 유월</span> (ไม่ใช่ <del>육월</del>) และ <span class="kr">10월 = 시월</span> (ไม่ใช่ <del>십월</del>)</p>
+            </div>
+          </div>
+          <div class="trap-item">
+            <div class="trap-num">2</div>
+            <div>
+              <strong>เลขเกาหลี 1, 2, 3, 4, 20 เปลี่ยนรูป!</strong>
+              <p>เมื่อตามด้วยลักษณะนาม (개, 명, 살, 시...): <span class="kr">하나→한, 둘→두, 셋→세, 넷→네, 스물→스무</span></p>
+            </div>
+          </div>
+          <div class="trap-item">
+            <div class="trap-num">3</div>
+            <div>
+              <strong>เวลาผสม 2 ระบบ!</strong>
+              <p><strong>ชั่วโมง (시) = เลขเกาหลี</strong> / <strong>นาที (분) = เลขจีน</strong> เช่น 8:30 = <span class="kr">여덟 시 삼십 분 / 반</span></p>
+            </div>
+          </div>
+          <div class="trap-item">
+            <div class="trap-num">4</div>
+            <div>
+              <strong>มีตัวสะกด vs ไม่มีตัวสะกด</strong>
+              <p>มีตัวสะกด: <span class="kr">이에요 / 이 / 은 / 을</span> • ไม่มีตัวสะกด: <span class="kr">예요 / 가 / 는 / 를</span></p>
+            </div>
+          </div>
+          <div class="trap-item">
+            <div class="trap-num">5</div>
+            <div>
+              <strong>คำลา 안녕히 가세요 vs 계세요</strong>
+              <p>คนอยู่พูดกับคนไป: <span class="kr">안녕히 가세요</span> (เดินทางดีๆ) • คนไปพูดกับคนอยู่: <span class="kr">안녕히 계세요</span> (อยู่ดีๆ นะ)</p>
+            </div>
+          </div>
+          <div class="trap-item">
+            <div class="trap-num">6</div>
+            <div>
+              <strong>ขีดกลาง (-) ในเบอร์โทรอ่านว่า 에</strong>
+              <p>010-5920-7245 = <span class="kr">공일공에 오구이공에 칠이사오예요</span> (0 อ่าน <span class="kr">공</span>)</p>
+            </div>
+          </div>
+          <div class="trap-item">
+            <div class="trap-num">7</div>
+            <div>
+              <strong>พี่ชาย / พี่สาว ขึ้นอยู่กับเพศคนพูด!</strong>
+              <p>ผู้หญิงเรียก <span class="kr">오빠</span> (พี่ชาย) / <span class="kr">언니</span> (พี่สาว) • ผู้ชายเรียก <span class="kr">형</span> (พี่ชาย) / <span class="kr">누나</span> (พี่สาว)</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TAB 2: HOUR 1 GRAMMAR ==================== -->
+    <section id="tab-grammar" class="tab-panel">
+      <div class="section-header">
+        <div>
+          <span class="eyebrow">ชั่วโมงที่ 1 (00:00 – 01:00)</span>
+          <h2>ไวยากรณ์หลักทั้งเทอม (Lecture 4–14)</h2>
+          <p>กดปุ่ม 🔊 เพื่อฟังเสียงเกาหลีทุกประโยค และทำแบบฝึกหัดสั้นๆ ท้ายแต่ละหัวข้อเพื่อเช็กความเข้าใจทันที</p>
+        </div>
+        <button class="btn btn-primary" onclick="markModuleDone('hour1'); switchTab('numbers')">จบ ชม. 1 → ไป ชม. 2 (ตัวเลข)</button>
+      </div>
+
+      <div class="sub-pills" id="grammar-pills">
+        <button class="pill active" data-gpanel="g-particles">1. ตัวชี้ & 이에요/예요</button>
+        <button class="pill" data-gpanel="g-like">2. ชอบ/ไม่ชอบ & สั่งของ</button>
+        <button class="pill" data-gpanel="g-location">3. สถานที่ & 12 ตำแหน่ง</button>
+        <button class="pill" data-gpanel="g-convo">4. บทสนทนา & ครอบครัว</button>
+        <button class="pill" data-gpanel="g-reading">5. ตัวสะกด & โยงเสียง</button>
+      </div>
+
+      <!-- Grammar Subpanel 1 -->
+      <div id="g-particles" class="grammar-subpanel active">
+        <div class="card">
+          <h3>ตารางสรุปตัวชี้ 4 ชุดที่ต้องแม่น 100%</h3>
+          <div class="table-wrap">
+            <table class="study-table">
+              <thead>
+                <tr>
+                  <th>ไวยากรณ์</th>
+                  <th>ความหมาย / หน้าที่</th>
+                  <th>มีตัวสะกด (받침 O)</th>
+                  <th>ไม่มีตัวสะกด (받침 X)</th>
+                  <th>ตัวอย่าง (คลิกฟังเสียง)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong class="kr">이에요 / 예요</strong></td>
+                  <td>เป็น, คือ (วางหลังคำนาม)</td>
+                  <td><span class="badge-teal kr">+ 이에요</span></td>
+                  <td><span class="badge-coral kr">+ 예요</span></td>
+                  <td>
+                    <button class="speak-chip" onclick="speak('학생이에요')">🔊 학생이에요</button>
+                    <button class="speak-chip" onclick="speak('의사예요')">🔊 의사예요</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong class="kr">이 / 가</strong></td>
+                  <td>ตัวชี้ประธาน 1 (เน้นตัวประธาน / ใช้กับ 있어요, 없어요, 뭐예요)</td>
+                  <td><span class="badge-teal kr">+ 이</span></td>
+                  <td><span class="badge-coral kr">+ 가</span></td>
+                  <td>
+                    <button class="speak-chip" onclick="speak('이름이 뭐예요?')">🔊 이름이 뭐예요?</button>
+                    <button class="speak-chip" onclick="speak('의자가 있어요')">🔊 의자가 있어요</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong class="kr">은 / 는</strong></td>
+                  <td>ตัวชี้ประธาน 2 / หัวเรื่อง (แนะนำตัว, เปรียบเทียบ)</td>
+                  <td><span class="badge-teal kr">+ 은</span></td>
+                  <td><span class="badge-coral kr">+ 는</span></td>
+                  <td>
+                    <button class="speak-chip" onclick="speak('저는 태국 사람이에요')">🔊 저는 태국 사람이에요</button>
+                    <button class="speak-chip" onclick="speak('선생님은 한국 사람이에요')">🔊 선생님은...</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong class="kr">을 / 를</strong></td>
+                  <td>ตัวชี้กรรม (ใช้กับ 좋아해요 / 싫어해요)</td>
+                  <td><span class="badge-teal kr">+ 을</span></td>
+                  <td><span class="badge-coral kr">+ 를</span></td>
+                  <td>
+                    <button class="speak-chip" onclick="speak('라면을 싫어해요')">🔊 라면을 싫어해요</button>
+                    <button class="speak-chip" onclick="speak('사과를 좋아해요')">🔊 사과를 좋아해요</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="note-box">
+            <strong>💡 เกร็ดสำคัญของคำว่า "ฉัน" (저):</strong>
+            • ใช้กับ <span class="kr">은/는</span> → <span class="kr"><strong>저는</strong></span> (ฉัน...)
+            • ใช้กับ <span class="kr">이/가</span> → <span class="kr"><strong>제가</strong></span> (ฉันเป็นคน...)
+            • แสดงความเป็นเจ้าของ "ของฉัน" → <span class="kr"><strong>제</strong></span> เช่น <span class="kr">제 이름</span> (ชื่อของฉัน), <span class="kr">제 생일</span> (วันเกิดของฉัน), <span class="kr">제 거예요</span> (เป็นของฉัน)
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header-row">
+            <h3>⚡ ฝึกเร็ว: เลือกตัวชี้ให้ถูก (Batchim Drill)</h3>
+            <button class="btn-tiny btn-outline" onclick="initParticleDrill()">สุ่มชุดใหม่</button>
+          </div>
+          <div id="particle-drill-container" class="mini-drill-grid"></div>
+        </div>
+      </div>
+
+      <!-- Grammar Subpanel 2 -->
+      <div id="g-like" class="grammar-subpanel">
+        <div class="two-col">
+          <div class="card">
+            <h3>❤️ ชอบ / ไม่ชอบ (Lecture 14)</h3>
+            <div class="formula-box">
+              <div><span class="kr big">N + 을/를 좋아해요.</span> = ชอบ ...</div>
+              <div><span class="kr big">N + 을/를 싫어해요.</span> = ไม่ชอบ ...</div>
+            </div>
+            <ul class="example-list">
+              <li><button class="speak-btn" onclick="speak('아메리카노를 좋아해요?')">🔊</button> <span class="kr">아메리카노<strong>를</strong> 좋아해요?</span> — ชอบอเมริกาโน่ไหม?</li>
+              <li><button class="speak-btn" onclick="speak('네, 아메리카노를 좋아해요.')">🔊</button> <span class="kr">네, 아메리카노<strong>를</strong> 좋아해요.</span> — ใช่ ชอบอเมริกาโน่</li>
+              <li><button class="speak-btn" onclick="speak('라면을 싫어해요.')">🔊</button> <span class="kr">라면<strong>을</strong> 싫어해요.</span> — ไม่ชอบรามยอน</li>
+              <li><button class="speak-btn" onclick="speak('저는 운동을 좋아해요.')">🔊</button> <span class="kr">저는 운동<strong>을</strong> 좋아해요.</span> — ฉันชอบออกกำลังกาย</li>
+              <li><button class="speak-btn" onclick="speak('크루아상을 싫어해요.')">🔊</button> <span class="kr">크루아상<strong>을</strong> 싫어해요.</span> — ไม่ชอบครัวซองต์</li>
+            </ul>
+            <p class="muted">คำศัพท์คาเฟ่จาก Lecture 14: <span class="kr">아메리카노(를), 라테(를), 밀크티(를), 레모네이드(를), 와플(을), 샌드위치(를), 크루아상(을), 운동(을), 춤(을), 초콜릿(을)</span></p>
+          </div>
+
+          <div class="card">
+            <h3>🍽️ การสั่งอาหาร / ขอของ & ถามสิ่งของ (Lecture 7–8)</h3>
+            <div class="formula-box">
+              <div><span class="kr big">N + 주세요.</span> = ขอ ... หน่อยครับ/ค่ะ</div>
+              <div><span class="kr big">N1 + 하고 + N2</span> = N1 และ N2</div>
+              <div><span class="kr big">이게 뭐예요? / 저게 뭐예요?</span> = นี่/นั่นคืออะไร?</div>
+            </div>
+            <ul class="example-list">
+              <li><button class="speak-btn" onclick="speak('어서 오세요. 뭘 드릴까요?')">🔊</button> <span class="kr">어서 오세요. 뭘 드릴까요?</span> — ยินดีต้อนรับ รับอะไรดีคะ?</li>
+              <li><button class="speak-btn" onclick="speak('냉면 두 그릇 주세요.')">🔊</button> <span class="kr">냉면 두 그릇 주세요.</span> — ขอบะหมี่เย็น 2 ชาม</li>
+              <li><button class="speak-btn" onclick="speak('빵 세 개하고 콜라 다섯 병 주세요.')">🔊</button> <span class="kr">빵 세 개<strong>하고</strong> 콜라 다섯 병 주세요.</span> — ขอขนมปัง 3 ชิ้น และโคล่า 5 ขวด</li>
+              <li><button class="speak-btn" onclick="speak('여기요, 물 좀 주세요.')">🔊</button> <span class="kr">여기요, 물 좀 주세요.</span> — ขอโทษครับ ขอน้ำหน่อยครับ</li>
+              <li><button class="speak-btn" onclick="speak('우산 누구 거예요? 제 거예요.')">🔊</button> <span class="kr">우산 누구 거예요? → 제 거예요.</span> — ร่มของใคร? ของฉันค่ะ</li>
+              <li><button class="speak-btn" onclick="speak('고마워요. 아니에요.')">🔊</button> <span class="kr">고마워요. → 아니에요.</span> — ขอบคุณนะ → ไม่เป็นไร</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Grammar Subpanel 3 -->
+      <div id="g-location" class="grammar-subpanel">
+        <div class="card">
+          <h3>📍 ตัวชี้สถานที่ <span class="kr">에</span> & 12 คำบอกตำแหน่ง (Lecture 9 & 13)</h3>
+          <div class="formula-box">
+            <div><span class="kr big">A + 이/가 + [สถานที่] + 에 있어요 / 없어요.</span> = A อยู่ / ไม่อยู่ที่ ...</div>
+            <div><span class="kr big">A + 이/가 + [สิ่งของ] + [ตำแหน่ง] + 에 있어요.</span> = A อยู่ [บน/ใต้/หน้า/หลัง...] ของ ...</div>
+            <div><span class="kr big">A 하고 B 사이에 있어요.</span> = อยู่ระหว่าง A กับ B</div>
+          </div>
+          <p class="muted">คลิกแต่ละการ์ดเพื่อฟังเสียงและจำภาพให้แม่น (ออกสอบทั้ง Part 2 และ Part 3 Writing!)</p>
+          <div id="position-cards-grid" class="position-grid"></div>
+        </div>
+
+        <div class="card">
+          <h3>🏠 ตัวอย่างบทอ่านอธิบายห้อง (จาก Lecture 13 Exercise 8)</h3>
+          <div class="reading-passage">
+            <button class="btn-tiny btn-primary" onclick="speak('여기가 제 방이에요. 방이 육 층에 있어요. 제 방에 침대하고 책상하고 의자가 있어요. 침대 위에 가방이 있어요. 그리고 책상 위에 컴퓨터하고 책이 있어요. 의자 옆에 구두가 있어요. 텔레비전하고 냉장고가 제 방에 없어요.')">🔊 ฟังทั้งย่อหน้า</button>
+            <p class="kr passage-kr">여기가 제 방이에요. 방이 육 층에 있어요. 제 방에 침대하고 책상하고 의자가 있어요. 침대 <strong>위에</strong> 가방이 있어요. 그리고 책상 <strong>위에</strong> 컴퓨터하고 책이 있어요. 의자 <strong>옆에</strong> 구두가 있어요. 텔레비전하고 냉장고가 제 방에 <strong>없어요</strong>.</p>
+            <p class="muted">แปล: ที่นี่คือห้องของฉัน ห้องอยู่ชั้น 6 ในห้องมีเตียง โต๊ะ และเก้าอี้ บนเตียงมีกระเป๋า และบนโต๊ะมีคอมพิวเตอร์กับหนังสือ ข้างๆ เก้าอี้มีรองเท้าคัทชู ทีวีกับตู้เย็นไม่มีในห้องของฉัน</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Grammar Subpanel 4 -->
+      <div id="g-convo" class="grammar-subpanel">
+        <div class="two-col">
+          <div class="card">
+            <h3>💬 ประโยคถาม-ตอบสุดฮิต (Study Review 1–4)</h3>
+            <div class="qa-list" id="qa-list"></div>
+          </div>
+          <div class="card">
+            <h3>👨‍👩‍👧‍👦 ครอบครัว & การกล่าวลา (Lecture 12)</h3>
+            <div class="formula-box">
+              <div><span class="kr">가족이 모두 몇 명이에요?</span> = ครอบครัวมีทั้งหมดกี่คน?</div>
+              <div><span class="kr">여섯 명이에요.</span> = มี 6 คน</div>
+              <div><span class="kr">누가 있어요?</span> = มีใครบ้าง?</div>
+              <div><span class="kr">아버지하고 어머니하고 여동생이 있어요.</span></div>
+            </div>
+            <div class="family-split">
+              <div class="fam-box">
+                <strong>👩 ถ้าคนพูดเป็น "ผู้หญิง"</strong>
+                <ul>
+                  <li><button class="speak-chip" onclick="speak('오빠')">🔊 오빠</button> พี่ชาย</li>
+                  <li><button class="speak-chip" onclick="speak('언니')">🔊 언니</button> พี่สาว</li>
+                </ul>
+              </div>
+              <div class="fam-box">
+                <strong>👨 ถ้าคนพูดเป็น "ผู้ชาย"</strong>
+                <ul>
+                  <li><button class="speak-chip" onclick="speak('형')">🔊 형</button> พี่ชาย</li>
+                  <li><button class="speak-chip" onclick="speak('누나')">🔊 누나</button> พี่สาว</li>
+                </ul>
+              </div>
+            </div>
+            <div class="note-box">
+              <strong>👋 การกล่าวลา (ห้ามสลับ!):</strong><br />
+              • <button class="speak-chip" onclick="speak('안녕히 가세요')">🔊 안녕히 가세요</button> (≈ 잘 가요) → พูดกับ <strong>คนที่กำลังจะเดินไป</strong><br />
+              • <button class="speak-chip" onclick="speak('안녕히 계세요')">🔊 안녕히 계세요</button> (≈ 잘 있어요) → พูดกับ <strong>คนที่อยู่ต่อ</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Grammar Subpanel 5 -->
+      <div id="g-reading" class="grammar-subpanel">
+        <div class="two-col">
+          <div class="card">
+            <h3>🔤 ตัวสะกด 7 เสียง (받침 — Lecture 4)</h3>
+            <table class="study-table compact">
+              <thead><tr><th>แม่เสียง</th><th>เสียง</th><th>ตัวสะกดเกาหลี</th><th>ตัวอย่าง</th></tr></thead>
+              <tbody>
+                <tr><td>แม่ กก</td><td>ก</td><td class="kr">ㄱ, ㄲ, ㅋ, ㄳ, ㄺ</td><td class="kr">학교, 태국, 책</td></tr>
+                <tr><td>แม่ กน</td><td>น</td><td class="kr">ㄴ, ㄵ, ㄶ</td><td class="kr">핸드폰, 신문, 전화</td></tr>
+                <tr><td>แม่ กล</td><td>ล</td><td class="kr">ㄹ, ㄽ, ㄼ, ㄾ, ㅀ</td><td class="kr">하늘, 물, 연필</td></tr>
+                <tr><td>แม่ กบ</td><td>บ</td><td class="kr">ㅂ, ㅍ, ㅄ, ㄿ</td><td class="kr">밥, 집, 없다</td></tr>
+                <tr><td>แม่ กม</td><td>ม</td><td class="kr">ㅁ, ㄻ</td><td class="kr">밤, 남자, 김치</td></tr>
+                <tr><td>แม่ กง</td><td>ง</td><td class="kr">ㅇ</td><td class="kr">방, 공항, 동생</td></tr>
+                <tr><td>แม่ กด</td><td>ด</td><td class="kr">ㄷ, ㅌ, ㅅ, ㅆ, ㅈ, ㅊ, ㅎ</td><td class="kr">옷, 꽃, 낮, 끝</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="card">
+            <h3>🔗 กฎการโยงเสียง (연음화 — Lecture 5)</h3>
+            <p>สำคัญมากสำหรับ <strong>Part 1 Listening</strong> เพราะเจ้าของภาษาจะโยงเสียงเสมอ!</p>
+            <ol class="rules-list">
+              <li><strong>ตัวสะกด + ㅇ</strong> → โยงตัวสะกดไปเป็นพยัญชนะต้นของพยางค์ถัดไป<br />
+                เช่น <button class="speak-chip" onclick="speak('한국어')">🔊 한국어 → [한구거]</button>
+                <button class="speak-chip" onclick="speak('음악')">🔊 음악 → [으막]</button>
+                <button class="speak-chip" onclick="speak('십일월')">🔊 십일월 → [시비뤌]</button>
+                <button class="speak-chip" onclick="speak('있어요')">🔊 있어요 → [이써요]</button>
+              </li>
+              <li><strong>ตัวสะกด ㅇ + ㅇ</strong> → คงเสียง "ง" ไว้ ไม่โยงหาย<br />
+                เช่น <button class="speak-chip" onclick="speak('고양이')">🔊 고양이 → [고양이]</button>
+              </li>
+              <li><strong>ตัวสะกดคู่ + ㅇ</strong> → โยงเฉพาะตัวสะกดตัวหลังไปข้างหน้า<br />
+                เช่น <button class="speak-chip" onclick="speak('없어요')">🔊 없어요 → [업써요]</button>
+                <button class="speak-chip" onclick="speak('앉아요')">🔊 앉아요 → [안자요]</button>
+              </li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TAB 3: HOUR 2 NUMBERS ==================== -->
+    <section id="tab-numbers" class="tab-panel">
+      <div class="section-header">
+        <div>
+          <span class="eyebrow">ชั่วโมงที่ 2 (01:00 – 02:00) • เน้นออกสอบหนักที่สุด!</span>
+          <h2>ตัวเลขทั้งหมด: เลขเกาหลี vs เลขจีน (Lecture 8–10)</h2>
+          <p>ออกสอบครบทั้ง 3 พาร์ท (เวลา, ราคา, เบอร์โทร, วันที่/เดือน, อายุ, ชั้น, นับสิ่งของ) ฝึกจนคล่องในหน้านี้!</p>
+        </div>
+        <button class="btn btn-primary" onclick="markModuleDone('hour2'); switchTab('vocab')">จบ ชม. 2 → ทวนคำศัพท์</button>
+      </div>
+
+      <div class="two-col">
+        <div class="card border-teal">
+          <h3>🟢 เลขเกาหลีแท้ (고유어 수사)</h3>
+          <p class="muted">ใช้กับ: <strong>นับสิ่งของ (개, 명, 병, 잔, 그릇, 권...), อายุ (살), ชั่วโมง (시)</strong></p>
+          <div class="num-grid" id="native-num-grid"></div>
+          <div class="note-box teal-note">
+            <strong>หลักสิบเกาหลี (ใช้บอกอายุ!):</strong><br />
+            <span class="kr">20 스물(스무) • 30 서른 • 40 마흔 • 50 쉰 • 60 예순 • 70 일흔 • 80 여든 • 90 아흔</span><br />
+            เช่น อายุ 20 = <button class="speak-chip" onclick="speak('스무 살이에요')">🔊 스무 살이에요</button> | 21 = <button class="speak-chip" onclick="speak('스물한 살이에요')">🔊 스물한 살이에요</button> | 54 = <button class="speak-chip" onclick="speak('쉰네 살이에요')">🔊 쉰네 살이에요</button>
+          </div>
+        </div>
+
+        <div class="card border-coral">
+          <h3>🔴 เลขจีน (한자어 수사)</h3>
+          <p class="muted">ใช้กับ: <strong>วัน/เดือน/ปี (일/월/년), ราคา (원), เบอร์โทร (번), ชั้น (층), นาที (분), วินาที (초)</strong></p>
+          <div class="num-grid" id="sino-num-grid"></div>
+          <div class="note-box coral-note">
+            <strong>หลักใหญ่ (ใช้บอกราคา 원!):</strong><br />
+            <span class="kr">10 십 • 100 백 • 1,000 천 • 10,000 만</span><br />
+            ⚠️ <strong>ห้ามใส่ 일 หน้า 백/천/만</strong> เช่น 1,000 = <span class="kr">천 원</span> (ไม่ใช่ 일천), 15,000 = <span class="kr">만 오천 원</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Counters & Months Quick Reference -->
+      <div class="two-col">
+        <div class="card">
+          <h3>📦 ลักษณะนามที่ออกสอบบ่อย</h3>
+          <div class="counters-grid" id="counters-grid"></div>
+        </div>
+        <div class="card">
+          <h3>📅 12 เดือน (월) — ระวัง 2 เดือนตัวแดง!</h3>
+          <div class="months-grid" id="months-grid"></div>
+        </div>
+      </div>
+
+      <!-- Interactive Number Drills -->
+      <div class="card drill-studio">
+        <div class="card-header-row">
+          <div>
+            <h3>⚡ สนามฝึกตัวเลข Interactive (สุ่มโจทย์ไม่อั้น!)</h3>
+            <p class="muted">เลือกโหมดที่อยากฝึก แล้วพิมพ์คำตอบหรือกดเลือก — มีเสียงอ่านเฉลยให้ทุกข้อ</p>
+          </div>
+          <div class="sub-pills compact-pills" id="num-drill-tabs">
+            <button class="pill active" data-ndrill="time">⏰ บอกเวลา</button>
+            <button class="pill" data-ndrill="price">💰 บอกราคา</button>
+            <button class="pill" data-ndrill="date">📅 วันที่ & เดือน</button>
+            <button class="pill" data-ndrill="phone">📞 เบอร์โทร</button>
+            <button class="pill" data-ndrill="counter">🧮 นับจำนวน</button>
+          </div>
+        </div>
+        <div id="num-drill-stage" class="drill-stage"></div>
+      </div>
+    </section>
+
+    <!-- ==================== TAB 4: VOCABULARY ==================== -->
+    <section id="tab-vocab" class="tab-panel">
+      <div class="section-header">
+        <div>
+          <span class="eyebrow">คำศัพท์จากหนังสือ Sogang 1A + ชีท 1–14</span>
+          <h2>คลังคำศัพท์ & Flashcards พร้อมเสียงอ่าน</h2>
+          <p>กดที่การ์ดเพื่อพลิกดูคำแปล กด 🔊 เพื่อฟังเสียง และติ๊ก ✅ เมื่อจำได้แล้ว</p>
+        </div>
+        <div class="vocab-controls">
+          <input type="search" id="vocab-search" placeholder="ค้นหาคำศัพท์ (เกาหลี / ไทย)..." />
+          <label class="toggle-check">
+            <input type="checkbox" id="vocab-hide-known" /> ซ่อนคำที่จำได้แล้ว
+          </label>
+        </div>
+      </div>
+
+      <div class="sub-pills" id="vocab-category-pills"></div>
+      <div class="vocab-stats-bar">
+        <span id="vocab-count-label">แสดง 0 คำ</span>
+        <span id="vocab-mastered-label">จำได้แล้ว 0 คำ</span>
+      </div>
+      <div id="vocab-grid" class="vocab-grid"></div>
+    </section>
+
+    <!-- ==================== TAB 5: HOUR 3 MOCK EXAM ==================== -->
+    <section id="tab-exam" class="tab-panel">
+      <div class="section-header">
+        <div>
+          <span class="eyebrow">ชั่วโมงที่ 3 (02:00 – 03:00) • ตะลุยข้อสอบจริง 3 พาร์ท</span>
+          <h2>ข้อสอบจำลอง Final Exam (LNG281 — 40 คะแนน)</h2>
+          <p>ครบทั้ง Part 1 Listening (ไฟล์เสียงจริง + บทสนทนา 12 ข้อ), Part 2 Grammar/Vocab/Convo (30 ข้อ), Part 3 Writing จากรูป (18 ข้อ ตรง Study Review)</p>
+        </div>
+        <div class="exam-score-box">
+          <span>คะแนนรวมจำลอง</span>
+          <strong id="exam-total-score">0 / 60</strong>
+        </div>
+      </div>
+
+      <div class="sub-pills" id="exam-part-pills">
+        <button class="pill active" data-epart="part1">🎧 Part 1: Listening (12 ข้อ + Track 32)</button>
+        <button class="pill" data-epart="part2">📝 Part 2: Grammar + Vocab + Convo (30 ข้อ)</button>
+        <button class="pill" data-epart="part3">✍️ Part 3: Writing จากรูป (18 ข้อ)</button>
+      </div>
+
+      <!-- Part 1: Listening -->
+      <div id="epart-part1" class="exam-subpanel active">
+        <div class="card track32-card">
+          <div class="track32-header">
+            <div>
+              <span class="bp-tag bp-mc">เสียงจริงจาก Google Classroom (Week 11)</span>
+              <h3>🎵 Track 32: 5월 26일이 제 생일이에요 (บทสนทนาทางโทรศัพท์)</h3>
+              <p class="muted">ฟังไฟล์เสียงจริงจากหนังสือ Sogang 1A หน้า 66–68 แล้วลองตอบคำถามด้านล่าง</p>
+            </div>
+            <audio controls src="materials/32-track32.mp3" class="audio-player"></audio>
+          </div>
+          <details class="script-toggle">
+            <summary>📄 เปิด/ซ่อน สคริปต์ Track 32 (บทสนทนามินา & แอนดี้)</summary>
+            <div class="script-grid">
+              <div>
+                <p><strong class="kr">미나 어머니:</strong> 여보세요.</p>
+                <p><strong class="kr">앤디:</strong> 여보세요, 미나 씨 집이에요?</p>
+                <p><strong class="kr">미나 어머니:</strong> 네, 맞아요.</p>
+                <p><strong class="kr">앤디:</strong> 미나 씨 있어요? 좀 바꿔 주세요.</p>
+                <p><strong class="kr">미나 어머니:</strong> 지금 없어요.</p>
+                <p><strong class="kr">앤디:</strong> 미나 씨 핸드폰 번호가 몇 번이에요?</p>
+                <p><strong class="kr">미나 어머니:</strong> 실례지만, 누구세요?</p>
+                <p><strong class="kr">앤디:</strong> 친구 앤디예요.</p>
+                <p><strong class="kr">미나 어머니:</strong> 010-5337-3010이에요.</p>
+                <p><strong class="kr">앤디:</strong> 감사합니다.</p>
+              </div>
+              <div>
+                <p><strong class="kr">미나:</strong> 여보세요.</p>
+                <p><strong class="kr">앤디:</strong> 미나 씨, 저 앤디예요.</p>
+                <p><strong class="kr">미나:</strong> 아! 앤디 씨, 안녕하세요?</p>
+                <p><strong class="kr">앤디:</strong> 미나 씨, 5월 26일에 시간 있어요?</p>
+                <p><strong class="kr">미나:</strong> 네, 있어요. 왜요?</p>
+                <p><strong class="kr">앤디:</strong> 5월 26일이 제 생일이에요.</p>
+                <p><strong class="kr">미나:</strong> 아, 그래요?</p>
+              </div>
+            </div>
+          </details>
+        </div>
+
+        <div class="card">
+          <div class="card-header-row">
+            <h3>🎧 แบบทดสอบฟังบทสนทนาสั้นๆ (12 ข้อ — แนวข้อสอบจริง)</h3>
+            <div class="speed-control">
+              <span>ความเร็วเสียง:</span>
+              <button class="btn-tiny btn-outline speed-btn" data-rate="0.75">ช้า (0.75x)</button>
+              <button class="btn-tiny btn-primary speed-btn" data-rate="0.95">ปกติ (0.95x)</button>
+            </div>
+          </div>
+          <div id="listening-quiz-list" class="quiz-list"></div>
+        </div>
+      </div>
+
+      <!-- Part 2: Grammar + Vocab + Convo -->
+      <div id="epart-part2" class="exam-subpanel">
+        <div class="card">
+          <div class="card-header-row">
+            <div>
+              <h3>📝 Part 2: Grammar + Vocab + Conversation (30 ข้อ ตัวเลือก)</h3>
+              <p class="muted">คลิกเลือกคำตอบเพื่อตรวจทันทีพร้อมคำอธิบายละเอียด</p>
+            </div>
+            <div class="filter-row">
+              <button class="btn-tiny btn-outline" onclick="resetPart2()">ทำใหม่ทั้งหมด</button>
+            </div>
+          </div>
+          <div id="part2-quiz-list" class="quiz-list"></div>
+        </div>
+      </div>
+
+      <!-- Part 3: Writing -->
+      <div id="epart-part3" class="exam-subpanel">
+        <div class="card">
+          <div class="card-header-row">
+            <div>
+              <h3>✍️ Part 3: Writing — เขียนคำหรือประโยคจากรูป (18 ข้อ ตรง Study Review!)</h3>
+              <p class="muted">พิมพ์ภาษาเกาหลีลงช่องได้เลย หรือคลิก <strong>"ปุ่มตัวช่วยคำเกาหลี"</strong> ใต้แต่ละข้อถ้าไม่ได้เปิดคีย์บอร์ดเกาหลี</p>
+            </div>
+            <button class="btn-tiny btn-outline" onclick="resetPart3()">ล้างคำตอบทั้งหมด</button>
+          </div>
+          <div id="part3-writing-list" class="writing-grid"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>สร้างจากเอกสารเรียนจริงวิชา <strong>LNG281 Basic Korean (KMUTT)</strong> • ไฟล์ต้นฉบับทั้งหมดอยู่ที่ <code>c:\Users\User\KOREAEZ\materials\</code></p>
+  </footer>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
