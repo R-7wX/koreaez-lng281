@@ -402,6 +402,7 @@ function renderGuidedStage() {
               <div class="g-check-q">${cIdx + 1}. ${ck.q}</div>
               ${qKr ? `<button class="speak-btn" onclick="speak('${qKr.replace(/'/g, "\\'")}')">🔊 ฟังคำในโจทย์</button>` : ''}
             </div>
+            ${qKr ? buildWordBreakdownHTML(qKr) : ''}
             <div class="g-check-opts">
               ${ck.opts.map((opt, oIdx) => {
                 const optKr = extractKoreanPhrase(opt);
@@ -427,6 +428,18 @@ function renderGuidedStage() {
       </div>
     </div>
   `;
+
+  // Inject word-by-word breakdown under every example line in this guided stage
+  wrap.querySelectorAll('.g-ex').forEach(el => {
+    const krParts = (el.textContent || '').match(/[가-힣0-9]+(?:\s+[가-힣0-9]+)*/g);
+    if (!krParts) return;
+    const html = buildWordBreakdownHTML(krParts.join(' '));
+    if (html) {
+      const div = document.createElement('div');
+      div.innerHTML = html;
+      el.appendChild(div.firstElementChild);
+    }
+  });
 }
 
 function goGuidedStage(idx) {

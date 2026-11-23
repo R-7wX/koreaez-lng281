@@ -253,10 +253,16 @@ function showAudioToast(label) {
     toast.className = 'audio-toast kr';
     document.body.appendChild(toast);
   }
-  toast.textContent = '🔊 ' + (label.length > 36 ? label.slice(0, 36) + '…' : label);
+  const short = label.length > 34 ? label.slice(0, 34) + '…' : label;
+  const mean = typeof lookupWordThai === 'function' ? lookupWordThai(label) : '';
+  const read = typeof hangulToThai === 'function' && label.length <= 20 ? hangulToThai(label) : '';
+  let text = '🔊 ' + short;
+  if (read && state.showReadings !== false) text += ` (${read})`;
+  if (mean) text += ` = ${mean}`;
+  toast.textContent = text;
   toast.classList.add('show');
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => toast.classList.remove('show'), 2200);
+  toastTimer = setTimeout(() => toast.classList.remove('show'), 2800);
 }
 
 function speakWithWebSpeech(text, rate) {
@@ -488,7 +494,9 @@ function renderGrammarSections() {
   document.getElementById('qa-list').innerHTML = KEY_QA.map(item => `
     <div class="qa-item">
       <div><button class="speak-btn" onclick="speak('${item.q}')">🔊</button> <strong class="kr">A: ${item.q}</strong> ${readTag(item.q)} <span class="muted">(${item.th})</span></div>
-      <div style="margin-top:4px"><button class="speak-btn" onclick="speak('${item.a}')">🔊</button> <span class="kr">B: ${item.a}</span> ${readTag(item.a)}</div>
+      ${buildWordBreakdownHTML(item.q)}
+      <div style="margin-top:6px"><button class="speak-btn" onclick="speak('${item.a}')">🔊</button> <span class="kr">B: ${item.a}</span> ${readTag(item.a)}</div>
+      ${buildWordBreakdownHTML(item.a)}
     </div>
   `).join('');
 
@@ -750,7 +758,7 @@ function renderVocabGrid() {
         </div>
         <div class="vocab-kr kr">${v.kr}</div>
         ${readTag(v.kr, true)}
-        <div class="vocab-meaning hidden-meaning" data-meaning="${v.th}">แตะเพื่อดูคำแปล</div>
+        <div class="vocab-meaning" data-meaning="${v.th}">${v.th}</div>
         <div class="vocab-actions">
           <button class="btn-tiny ${known ? 'btn-teal' : 'btn-outline'}" onclick="event.stopPropagation(); toggleKnownVocab('${v.kr}')">
             ${known ? '✅ จำได้แล้ว' : 'ติ๊กเมื่อจำได้'}
@@ -810,6 +818,7 @@ function renderPart1Listening() {
         <div class="quiz-explain ${answered ? 'show ' + (isCorrect ? 'ok' : 'bad') : ''}">
           <strong>${isCorrect ? '✅ ถูกต้อง!' : '❌ ยังไม่ถูก'}</strong> — ${item.explain}<br/>
           <span class="kr"><strong>สคริปต์:</strong> ${item.script}</span> ${readTag(item.script, true)}
+          ${buildWordBreakdownHTML(item.script)}
         </div>
       </div>
     `;
@@ -838,6 +847,7 @@ function renderPart2Quiz() {
           <div class="quiz-q-text kr">${item.q}</div>
           ${hasKr ? `<button class="speak-btn" onclick="speak('${krPrompt.replace(/'/g, "\\'")}')">🔊</button>` : ''}
         </div>
+        ${hasKr ? buildWordBreakdownHTML(krPrompt) : ''}
         <div class="quiz-options">
           ${item.opts.map((opt, oIdx) => {
             let cls = 'choice-btn kr';
@@ -887,6 +897,7 @@ function renderPart3Writing() {
         </div>
         <div class="writing-visual">${visualHTML}</div>
         <div style="font-weight:700;font-size:0.94rem" class="kr">${item.prompt}</div>
+        ${buildWordBreakdownHTML(item.prompt)}
         <div class="writing-input-row">
           <input type="text" class="writing-input" id="winput-${item.id}" placeholder="${item.placeholder}" onkeydown="if(event.key==='Enter') checkWriting('${item.id}')" />
           <button class="btn-tiny btn-primary" onclick="checkWriting('${item.id}')">ตรวจ</button>
@@ -988,6 +999,19 @@ function injectStaticReadings() {
     el.appendChild(span);
     el.dataset.readInjected = '1';
   });
+  // Inject word-by-word breakdowns on Grammar examples, Reading passage, and Track 32 script
+  document.querySelectorAll('#tab-grammar .example-list li, #tab-grammar .passage-kr, .script-grid p').forEach(el => {
+    if (el.dataset.wbInjected) return;
+    const krParts = (el.textContent || '').match(/[가-힣0-9]+(?:\s+[가-힣0-9]+)*/g);
+    if (!krParts) return;
+    const html = buildWordBreakdownHTML(krParts.join(' '));
+    if (html) {
+      const div = document.createElement('div');
+      div.innerHTML = html;
+      el.appendChild(div.firstElementChild);
+      el.dataset.wbInjected = '1';
+    }
+  });
 }
 
 function applyReadingToggleUI() {
@@ -1001,12 +1025,32 @@ function applyReadingToggleUI() {
   }
 }
 
+function applyGlossaryToggleUI() {
+  const show = state.showGlossary !== false;
+  document.body.classList.toggle('hide-glossary', !show);
+  const glossBtn = document.getElementById('glossary-toggle');
+  if (glossBtn) {
+    glossBtn.textContent = show ? '📖 แปลทีละคำ: เปิด' : '📖 แปลทีละคำ: ปิด';
+    glossBtn.classList.toggle('btn-primary', show);
+    glossBtn.classList.toggle('btn-outline', !show);
+  }
+}
+
 const readingBtn = document.getElementById('reading-toggle');
 if (readingBtn) {
   readingBtn.addEventListener('click', () => {
     state.showReadings = state.showReadings === false ? true : false;
     saveState();
     applyReadingToggleUI();
+  });
+}
+
+const glossBtn = document.getElementById('glossary-toggle');
+if (glossBtn) {
+  glossBtn.addEventListener('click', () => {
+    state.showGlossary = state.showGlossary === false ? true : false;
+    saveState();
+    applyGlossaryToggleUI();
   });
 }
 
@@ -1023,5 +1067,6 @@ renderPart2Quiz();
 renderPart3Writing();
 injectStaticReadings();
 applyReadingToggleUI();
+applyGlossaryToggleUI();
 updateExamScore();
 updateGlobalProgress();
