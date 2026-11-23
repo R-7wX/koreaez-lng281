@@ -1017,8 +1017,18 @@ body.hide-readings .story-read {
   padding: 14px;
   margin-bottom: 12px;
 }
-.g-check-q { font-weight: 700; margin-bottom: 10px; font-size: 0.96rem; }
+.g-check-q-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.g-check-q { font-weight: 700; font-size: 0.96rem; }
 .g-check-opts { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.g-opt-wrap { display: flex; align-items: stretch; gap: 6px; }
+.g-opt-wrap .choice-btn { flex: 1; }
+.g-opt-speak { padding: 0 11px; flex-shrink: 0; }
 .g-check-fb { margin-top: 8px; font-size: 0.9rem; font-weight: 600; }
 .g-check-fb.ok { color: var(--teal); }
 .g-check-fb.hint { color: #B45309; }

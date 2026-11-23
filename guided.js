@@ -349,6 +349,14 @@ const GUIDED_STAGES = [
 
 let currentGuidedIdx = 0;
 
+function extractKoreanPhrase(str) {
+  if (!str) return '';
+  const m = str.match(/[가-힣0-9]+(?:\s+[가-힣0-9]+)*/g);
+  if (!m) return '';
+  const joined = m.join(' ').trim();
+  return /[가-힣]/.test(joined) ? joined : '';
+}
+
 function renderGuidedStage() {
   const wrap = document.getElementById('guided-stage-container');
   if (!wrap) return;
@@ -385,18 +393,29 @@ function renderGuidedStage() {
       <div class="guided-lesson">${stage.lessonHTML}</div>
 
       <div class="guided-checks">
-        <h3>✨ ลองเช็กความเข้าใจสั้นๆ (ไม่ต้องกลัวผิด กดลองได้เรื่อยๆ!)</h3>
-        ${stage.checks.map((ck, cIdx) => `
+        <h3>✨ ลองเช็กความเข้าใจสั้นๆ (กด 🔊 ฟังเสียงคำถามและตัวเลือกได้ทุกข้อ!)</h3>
+        ${stage.checks.map((ck, cIdx) => {
+          const qKr = extractKoreanPhrase(ck.q);
+          return `
           <div class="g-check-box" id="gcheck-${stage.id}-${cIdx}">
-            <div class="g-check-q">${cIdx + 1}. ${ck.q}</div>
+            <div class="g-check-q-row">
+              <div class="g-check-q">${cIdx + 1}. ${ck.q}</div>
+              ${qKr ? `<button class="speak-btn" onclick="speak('${qKr.replace(/'/g, "\\'")}')">🔊 ฟังคำในโจทย์</button>` : ''}
+            </div>
             <div class="g-check-opts">
-              ${ck.opts.map((opt, oIdx) => `
-                <button class="choice-btn kr" onclick="checkGuidedAnswer(${stage.id}, ${cIdx}, ${oIdx})">${opt}</button>
-              `).join('')}
+              ${ck.opts.map((opt, oIdx) => {
+                const optKr = extractKoreanPhrase(opt);
+                return `
+                <div class="g-opt-wrap">
+                  <button class="choice-btn kr" onclick="checkGuidedAnswer(${stage.id}, ${cIdx}, ${oIdx})">${opt}${optKr ? readTag(optKr, true) : ''}</button>
+                  ${optKr ? `<button class="speak-btn g-opt-speak" title="ฟังเสียงตัวเลือกนี้" onclick="event.stopPropagation(); speak('${optKr.replace(/'/g, "\\'")}')">🔊</button>` : ''}
+                </div>`;
+              }).join('')}
             </div>
             <div class="g-check-fb" id="gcheck-fb-${stage.id}-${cIdx}"></div>
           </div>
-        `).join('')}
+        `;
+        }).join('')}
       </div>
 
       <div class="guided-nav-footer">
