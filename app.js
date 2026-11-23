@@ -27,23 +27,94 @@ function saveState() {
   updateGlobalProgress();
 }
 
-// ==================== TTS KOREAN SPEECH ====================
-function speak(text, rateOverride) {
+// ==================== NATIVE KOREAN NEURAL AUDIO ENGINE ====================
+let currentAudio = null;
+let toastTimer = null;
+
+function cleanAudioKey(text) {
+  return String(text || '')
+    .replace(/\[.*?\]/g, '')
+    .replace(/🔊/g, '')
+    .replace(/→/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function showAudioToast(label) {
+  let toast = document.getElementById('audio-toast');
+  if (!toast) {
+    toast = document.createElement('div');
+    toast.id = 'audio-toast';
+    toast.className = 'audio-toast kr';
+    document.body.appendChild(toast);
+  }
+  toast.textContent = '🔊 ' + (label.length > 36 ? label.slice(0, 36) + '…' : label);
+  toast.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toast.classList.remove('show'), 2200);
+}
+
+function speakWithWebSpeech(text, rate) {
   if (!('speechSynthesis' in window)) return;
   window.speechSynthesis.cancel();
-  const clean = text.replace(/\[.*?\]/g, '').replace(/🔊/g, '').trim();
-  const utter = new SpeechSynthesisUtterance(clean);
+  const utter = new SpeechSynthesisUtterance(text);
   utter.lang = 'ko-KR';
-  utter.rate = rateOverride || speechRate;
+  utter.rate = rate;
   const voices = window.speechSynthesis.getVoices();
   const koVoice = voices.find(v => v.lang && v.lang.toLowerCase().startsWith('ko'));
   if (koVoice) utter.voice = koVoice;
   window.speechSynthesis.speak(utter);
 }
 
+function speak(text, rateOverride) {
+  const clean = cleanAudioKey(text);
+  if (!clean) return;
+  const rate = rateOverride || speechRate;
+  showAudioToast(clean);
+
+  if (currentAudio) {
+    try { currentAudio.pause(); currentAudio.currentTime = 0; } catch (e) {}
+    currentAudio = null;
+  }
+  if ('speechSynthesis' in window) {
+    try { window.speechSynthesis.cancel(); } catch (e) {}
+  }
+
+  const manifest = window.AUDIO_MANIFEST || {};
+  const mp3Path = manifest[clean] || manifest[clean.replace(/[.?!]$/, '')] || manifest[clean + '.'];
+
+  if (mp3Path) {
+    const audio = new Audio(mp3Path);
+    audio.playbackRate = rate;
+    currentAudio = audio;
+    audio.play().catch(() => speakWithWebSpeech(clean, rate));
+    return;
+  }
+
+  // Fallback for dynamic phrases (e.g., randomized Number Drills): Google TTS MP3 -> Web Speech API
+  const ttsUrl = `https://translate.google.com/translate_tts?ie=UTF-8&tl=ko&client=tw-ob&q=${encodeURIComponent(clean)}`;
+  const fallbackAudio = new Audio(ttsUrl);
+  fallbackAudio.playbackRate = rate;
+  currentAudio = fallbackAudio;
+  fallbackAudio.play().catch(() => speakWithWebSpeech(clean, rate));
+}
+
 if ('speechSynthesis' in window) {
   window.speechSynthesis.onvoiceschanged = () => {};
 }
+
+// Allow clicking ANY Korean text (.kr) across the entire page to hear it!
+document.addEventListener('click', (e) => {
+  if (e.target.closest('button, input, a, summary, audio, .pos-card, .num-tile, .counter-chip, .month-chip, .vocab-card')) return;
+  const krEl = e.target.closest('.kr');
+  if (!krEl) return;
+  const txt = krEl.textContent || '';
+  const hangulOnly = txt.match(/[가-힣0-9\s.,?!~-]+/g);
+  if (hangulOnly) {
+    const joined = cleanAudioKey(hangulOnly.join(' '));
+    if (/[가-힣]/.test(joined)) speak(joined);
+  }
+});
 
 // ==================== NAVIGATION ====================
 function switchTab(tabId) {
@@ -548,10 +619,14 @@ function renderPart2Quiz() {
     const saved = state.part2Answers[qIdx];
     const answered = saved !== undefined;
     const isCorrect = saved === item.ans;
+    const krMatches = item.q.match(/[가-힣0-9\s.,?!-]+/g);
+    const krPrompt = krMatches ? cleanAudioKey(krMatches.join(' ')) : '';
+    const hasKr = /[가-힣]/.test(krPrompt);
     return `
       <div class="quiz-item">
         <div class="quiz-q-head">
           <div class="quiz-q-text kr">${item.q}</div>
+          ${hasKr ? `<button class="speak-btn" onclick="speak('${krPrompt.replace(/'/g, "\\'")}')">🔊</button>` : ''}
         </div>
         <div class="quiz-options">
           ${item.opts.map((opt, oIdx) => {
@@ -573,6 +648,8 @@ function renderPart2Quiz() {
 
 function answerPart2(qIdx, oIdx) {
   state.part2Answers[qIdx] = oIdx;
+  const opt = PART2_QUIZ[qIdx].opts[oIdx];
+  if (/[가-힣]/.test(opt)) speak(opt);
   saveState();
   renderPart2Quiz();
   updateExamScore();
@@ -620,6 +697,7 @@ function appendHelper(id, text) {
   const joiner = cur && !['할', '아', '버', '지', '머', '니', '일', '이', '오', '구', '공', '영'].includes(text) ? ' ' : '';
   inp.value = cur ? cur + joiner + text : text;
   inp.focus();
+  speak(text);
 }
 
 function normalizeKr(str) {

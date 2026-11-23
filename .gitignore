@@ -1,5 +1,6 @@
 .venv/
 extracted/
+build_audio.py
 materials/*.pdf
 materials/*.png
 *.log
